@@ -1,1 +1,1464 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <title>David's Book Store — Read Without Being Watched</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CDN dependencies -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#050505',
+            charcoal: '#111111',
+            gold: '#d4af37',
+            goldlight: '#ffe98a',
+            ash: '#999999'
+          },
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            sans: ['Sora', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-light: #ffe98a;
+      --black: #050505;
+      --line: rgba(255,255,255,.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--black);
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(212,175,55,.08), transparent 34rem),
+        var(--black);
+      color: white;
+      font-family: Sora, sans-serif;
+    }
+
+    ::selection {
+      color: var(--black);
+      background: var(--gold);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--black);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background: #282828;
+    }
+
+    #heroCanvas,
+    #gridCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #gridCanvas {
+      opacity: .42;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(5,5,5,.98) 0%, rgba(5,5,5,.78) 31%, rgba(5,5,5,.15) 75%, rgba(5,5,5,.76) 100%),
+        radial-gradient(circle at 50% 50%, transparent 18%, rgba(5,5,5,.8) 95%);
+    }
+
+    .hero-scanlines {
+      position: absolute;
+      inset: 0;
+      opacity: .055;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        #fff 4px,
+        transparent 5px
+      );
+      mix-blend-mode: overlay;
+    }
+
+    .glitch {
+      position: relative;
+      text-shadow:
+        2px 0 rgba(255,0,75,.8),
+        -2px 0 rgba(0,220,255,.8);
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .glitch::before {
+      color: #ff174f;
+      transform: translateX(-3px);
+    }
+
+    .glitch::after {
+      color: #00e5ff;
+      transform: translateX(3px);
+    }
+
+    .glitch-active::before,
+    .glitch-active::after {
+      opacity: .8;
+      animation: glitchSlices .16s steps(2) 2;
+    }
+
+    @keyframes glitchSlices {
+      0% { clip-path: inset(10% 0 80% 0); }
+      25% { clip-path: inset(65% 0 8% 0); }
+      50% { clip-path: inset(35% 0 45% 0); }
+      75% { clip-path: inset(80% 0 4% 0); }
+      100% { clip-path: inset(0 0 0 0); }
+    }
+
+    .nav-solid {
+      background: rgba(5,5,5,.84);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .premium-btn {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      transform: translateZ(0);
+      transition:
+        transform .18s cubic-bezier(.2,1.8,.3,1),
+        box-shadow .18s ease,
+        background-color .18s ease,
+        border-color .18s ease;
+    }
+
+    .premium-btn::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -100% 25%;
+      background: linear-gradient(
+        110deg,
+        transparent 30%,
+        rgba(255,255,255,.82) 48%,
+        transparent 66%
+      );
+      transform: translateX(-160%) rotate(12deg);
+      transition: transform .5s ease;
+    }
+
+    .premium-btn:hover {
+      transform: translateY(-10px) scale(1.025);
+      box-shadow:
+        0 0 0 1px rgba(212,175,55,.65),
+        0 0 28px rgba(212,175,55,.48),
+        0 18px 40px rgba(0,0,0,.5);
+    }
+
+    .premium-btn:hover::before {
+      transform: translateX(160%) rotate(12deg);
+    }
+
+    .premium-btn:active {
+      transform: translateY(-4px) scale(.97);
+    }
+
+    .ripple {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      pointer-events: none;
+      background: rgba(255,255,255,.75);
+      transform: translate(-50%, -50%) scale(0);
+      animation: ripple .55s ease-out forwards;
+    }
+
+    @keyframes ripple {
+      to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(22);
+      }
+    }
+
+    .card-lift {
+      border: 1px solid var(--line);
+      transition:
+        transform .22s cubic-bezier(.2,1.7,.3,1),
+        border-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .card-lift:hover {
+      transform: translateY(-10px) rotateX(2deg);
+      border-color: rgba(212,175,55,.72);
+      box-shadow:
+        0 24px 50px rgba(0,0,0,.58),
+        0 0 30px rgba(212,175,55,.1);
+    }
+
+    .modal-hidden .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .modal-hidden .modal-panel {
+      opacity: 0;
+      transform: translateY(20px) scale(.96);
+      pointer-events: none;
+    }
+
+    .modal-backdrop,
+    .modal-panel {
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .chat-hidden .chat-panel {
+      opacity: 0;
+      transform: translateY(16px) scale(.94);
+      pointer-events: none;
+    }
+
+    .chat-panel {
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast {
+      transition: opacity .25s ease, transform .25s cubic-bezier(.2,1.5,.3,1);
+    }
+
+    .toast-hidden {
+      opacity: 0;
+      transform: translateY(30px);
+      pointer-events: none;
+    }
+
+    .section-reveal {
+      opacity: 0;
+      transform: translateY(32px);
+    }
+
+    @media (max-width: 767px) {
+      .hero-vignette {
+        background:
+          linear-gradient(180deg, rgba(5,5,5,.55) 0%, rgba(5,5,5,.7) 58%, rgba(5,5,5,.98) 100%),
+          radial-gradient(circle at 65% 42%, transparent, rgba(5,5,5,.84) 80%);
+      }
+
+      #heroCanvas {
+        opacity: .72;
+      }
+
+      #gridCanvas {
+        opacity: .24;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-obsidian text-white antialiased">
+
+  <header id="siteNav" class="fixed top-0 inset-x-0 z-40 transition-all duration-300">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between px-5 sm:px-8 lg:px-10 py-5">
+      <a href="#top" class="font-display text-xl sm:text-2xl tracking-tight">
+        David's Book Store
+      </a>
+
+      <div class="hidden md:flex items-center gap-9 text-sm text-neutral-400">
+        <a href="#shop" class="hover:text-gold transition-colors">Shelf</a>
+        <a href="#why" class="hover:text-gold transition-colors">Why us</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div id="signedOutControls" class="flex items-center gap-3">
+          <button
+            onclick="openModal('authModal'); setAuthMode('login')"
+            class="text-sm text-neutral-400 hover:text-gold transition-colors">
+            Sign in
+          </button>
+
+          <button
+            onclick="openModal('authModal'); setAuthMode('signup')"
+            class="premium-btn bg-gold text-obsidian font-semibold text-sm px-4 py-2.5 rounded-full">
+            Create account
+          </button>
+        </div>
+
+        <div id="signedInControls" class="hidden items-center gap-3">
+          <span id="greetingName" class="hidden sm:inline text-sm text-neutral-400"></span>
+          <button
+            onclick="showDashboard()"
+            class="text-sm text-neutral-400 hover:text-gold transition-colors">
+            My library
+          </button>
+          <button
+            onclick="logout()"
+            class="premium-btn border border-white/20 text-sm px-4 py-2.5 rounded-full hover:border-gold hover:text-gold">
+            Sign out
+          </button>
+        </div>
+
+        <button
+          onclick="toggleMobileMenu()"
+          aria-label="Open menu"
+          class="md:hidden ml-1">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div id="mobileMenu" class="hidden md:hidden px-5 pb-5 flex flex-col gap-4 text-sm text-neutral-400 bg-black/90 border-b border-white/10">
+      <a href="#shop" onclick="toggleMobileMenu()">Shelf</a>
+      <a href="#why" onclick="toggleMobileMenu()">Why us</a>
+      <a href="#" onclick="showDashboard(); toggleMobileMenu()">My library</a>
+    </div>
+  </header>
+
+  <main id="shopView">
+
+    <section id="top" class="relative min-h-[680px] h-[100svh] overflow-hidden">
+      <canvas id="gridCanvas" aria-hidden="true"></canvas>
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+      <div class="hero-vignette"></div>
+      <div class="hero-scanlines"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 h-full flex items-center">
+        <div class="max-w-2xl pt-20">
+          <p id="heroEyebrow" class="text-gold text-xs sm:text-sm uppercase tracking-[.28em] font-semibold mb-6">
+            Digital books. Printed nowhere.
+          </p>
+
+          <h1
+            id="heroTitle"
+            data-text="Read like the internet isn't watching"
+            class="glitch font-display text-[3.15rem] leading-[.95] sm:text-6xl lg:text-8xl tracking-[-.055em] max-w-3xl">
+            Read like the internet isn't watching
+          </h1>
+
+          <p id="heroCopy" class="mt-7 text-neutral-400 text-base sm:text-lg max-w-lg leading-relaxed">
+            A hard-edged shelf of novels, essays and technical writing. Buy once,
+            keep the file, read on whatever screen finds you tonight.
+          </p>
+
+          <div id="heroActions" class="mt-9 flex flex-wrap gap-4">
+            <a
+              href="#shop"
+              class="premium-btn ripple-target bg-gold text-obsidian font-semibold px-7 py-4 rounded-full">
+              Browse the shelf
+            </a>
+
+            <button
+              onclick="openModal('authModal'); setAuthMode('signup')"
+              class="premium-btn ripple-target border border-white/25 px-7 py-4 rounded-full hover:border-gold hover:text-gold">
+              Create a free account
+            </button>
+          </div>
+
+          <div id="heroStats" class="mt-12 flex items-center gap-7 sm:gap-9 text-xs sm:text-sm text-neutral-400">
+            <div>
+              <span class="font-display text-3xl text-white">6</span>
+              titles
+            </div>
+            <div class="w-px h-9 bg-white/20"></div>
+            <div>
+              <span class="font-display text-3xl text-white">₦5,000</span>
+              flat per book
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="shop" class="section-reveal px-5 sm:px-8 lg:px-10 py-20 sm:py-28 border-t border-white/10">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-end justify-between gap-5 flex-wrap mb-12">
+          <div>
+            <p class="text-gold text-xs uppercase tracking-[.25em] mb-4">The catalogue</p>
+            <h2 class="font-display text-4xl sm:text-5xl">The shelf</h2>
+            <p class="text-neutral-400 mt-3 max-w-lg leading-relaxed">
+              Six deliberate titles. DRM-free files. One payment, permanent access.
+            </p>
+          </div>
+
+          <div class="text-xs text-neutral-500 uppercase tracking-[.18em]">
+            No subscriptions
+          </div>
+        </div>
+
+        <div id="bookGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"></div>
+      </div>
+    </section>
+
+    <section id="why" class="section-reveal px-5 sm:px-8 lg:px-10 py-20 sm:py-28 border-t border-white/10 bg-white/[.025]">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12">
+        <div class="section-reveal">
+          <div class="text-gold text-3xl mb-5">✦</div>
+          <h3 class="font-display text-2xl mb-3">A shelf, not a warehouse</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">
+            Six titles, each one read before it is listed. Nothing added just to pad the catalogue.
+          </p>
+        </div>
+
+        <div class="section-reveal">
+          <div class="text-gold text-3xl mb-5">↯</div>
+          <h3 class="font-display text-2xl mb-3">Yours after one payment</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">
+            No subscription. No rental window. Your purchases stay in your library.
+          </p>
+        </div>
+
+        <div class="section-reveal">
+          <div class="text-gold text-3xl mb-5">◉</div>
+          <h3 class="font-display text-2xl mb-3">Checkout at full speed</h3>
+          <p class="text-neutral-400 text-sm leading-relaxed">
+            Secure payment through Paystack with instant access after confirmation.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section id="dashboardView" class="hidden pt-36 pb-24 px-5 sm:px-8 lg:px-10 min-h-screen">
+    <div class="max-w-5xl mx-auto">
+      <button onclick="showShop()" class="text-sm text-neutral-400 hover:text-gold mb-8">
+        ← Back to the shelf
+      </button>
+
+      <h2 class="font-display text-4xl sm:text-5xl mb-3">My library</h2>
+      <p class="text-neutral-400 mb-10">Your purchased books, ready whenever you are.</p>
+
+      <div id="libraryEmpty" class="hidden border border-dashed border-white/20 rounded-2xl p-12 text-center">
+        <p class="font-display text-2xl mb-2">Nothing here yet</p>
+        <p class="text-neutral-400 text-sm mb-6">Buy a book from the shelf to get started.</p>
+        <button onclick="showShop()" class="premium-btn bg-gold text-obsidian px-6 py-3 rounded-full font-semibold">
+          Go to the shelf
+        </button>
+      </div>
+
+      <div id="libraryGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/10 px-5 sm:px-8 lg:px-10 py-10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between gap-4 text-xs text-neutral-500">
+      <span class="font-display text-white text-lg">David's Book Store</span>
+      <span>© 2026 David's Book Store. Payments handled by Paystack.</span>
+    </div>
+  </footer>
+
+  <div id="authModal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center px-5">
+    <div class="modal-backdrop absolute inset-0 bg-black/90" onclick="closeModal('authModal')"></div>
+
+    <div class="modal-panel relative bg-[#121212] border border-white/10 rounded-2xl w-full max-w-md p-7 sm:p-8">
+      <button onclick="closeModal('authModal')" class="absolute top-5 right-5 text-neutral-400 hover:text-white">
+        ✕
+      </button>
+
+      <h3 id="authTitle" class="font-display text-3xl mb-1">Welcome back</h3>
+      <p id="authSubtitle" class="text-neutral-400 text-sm mb-7">Sign in to reach your library.</p>
+
+      <form onsubmit="handleAuthSubmit(event)" class="flex flex-col gap-4">
+        <div id="nameFieldWrap" class="hidden">
+          <label class="text-sm text-neutral-400 block mb-2">Name</label>
+          <input id="authName" type="text" autocomplete="name" class="auth-input" placeholder="Your name">
+        </div>
+
+        <div>
+          <label class="text-sm text-neutral-400 block mb-2">Email</label>
+          <input id="authEmail" type="email" required autocomplete="email" class="auth-input" placeholder="you@example.com">
+        </div>
+
+        <div>
+          <label class="text-sm text-neutral-400 block mb-2">Password</label>
+          <input id="authPassword" type="password" required minlength="6" autocomplete="current-password" class="auth-input" placeholder="At least 6 characters">
+        </div>
+
+        <p id="authError" class="hidden text-sm text-red-400"></p>
+
+        <button id="authSubmitBtn" class="premium-btn bg-gold text-obsidian font-semibold py-3.5 rounded-full mt-2">
+          Sign in
+        </button>
+      </form>
+
+      <p class="text-sm text-neutral-400 mt-6 text-center">
+        <span id="authSwitchPrompt">Don't have an account?</span>
+        <button onclick="toggleAuthMode()" id="authSwitchBtn" class="text-gold hover:text-goldlight ml-1">
+          Create one
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast toast-hidden fixed bottom-6 right-5 z-50 bg-[#161616] border border-white/10 rounded-xl px-5 py-4 max-w-xs shadow-2xl">
+    <p id="toastText" class="text-sm"></p>
+  </div>
+
+  <button
+    id="chatToggle"
+    onclick="toggleChat()"
+    aria-label="Book recommendation chat"
+    class="premium-btn fixed bottom-6 left-5 z-50 bg-gold text-obsidian w-14 h-14 rounded-full flex items-center justify-center shadow-2xl text-xl">
+    ✦
+  </button>
+
+  <div id="chatWidget" class="chat-hidden fixed bottom-24 left-5 z-50 w-[calc(100vw-2.5rem)] max-w-sm">
+    <div class="chat-panel bg-[#121212] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[440px]">
+      <div class="p-5 border-b border-white/10 flex items-center justify-between">
+        <div>
+          <p class="font-display text-lg">Book concierge</p>
+          <p class="text-neutral-500 text-xs">Genre, mood, or obsession</p>
+        </div>
+        <button onclick="toggleChat()" class="text-neutral-400">✕</button>
+      </div>
+
+      <div id="chatMessages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 text-sm"></div>
+
+      <form onsubmit="handleChatSubmit(event)" class="border-t border-white/10 p-3 flex gap-2">
+        <input id="chatInput" class="auth-input !rounded-full flex-1" placeholder="Try: something motivational">
+        <button class="premium-btn bg-gold text-obsidian w-11 rounded-full">→</button>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .auth-input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: .7rem;
+      padding: .85rem 1rem;
+      color: white;
+      background: #050505;
+      outline: none;
+    }
+
+    .auth-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,175,55,.12);
+    }
+  </style>
+
+  <script>
+    const FLAT_PRICE = 5000;
+
+    const BOOKS = [
+      {
+        id: 'unread-hour',
+        title: 'The Unread Hour',
+        author: 'Adaeze Okoro',
+        category: 'Fiction',
+        gradient: 'linear-gradient(155deg,#e7c84b,#050505 85%)',
+        ink: 'dark'
+      },
+      {
+        id: 'ledger-wins',
+        title: 'Ledger of Small Wins',
+        author: 'Tomiwa Bello',
+        category: 'Business',
+        gradient: 'linear-gradient(155deg,#050505,#d4af37 90%)',
+        ink: 'light'
+      },
+      {
+        id: 'static-signal',
+        title: 'Static and Signal',
+        author: 'Kwame Mensah',
+        category: 'Technology',
+        gradient: 'linear-gradient(155deg,#ffe98a,#050505 82%)',
+        ink: 'dark'
+      },
+      {
+        id: 'marginalia',
+        title: 'Marginalia',
+        author: 'Femi Okafor',
+        category: 'Essays',
+        gradient: 'linear-gradient(155deg,#ffffff,#050505 76%)',
+        ink: 'dark'
+      },
+      {
+        id: 'salt-roads',
+        title: 'Salt Roads',
+        author: 'Ijeoma Eze',
+        category: 'Fiction',
+        gradient: 'linear-gradient(155deg,#d4af37,#191919 85%)',
+        ink: 'dark'
+      },
+      {
+        id: 'kitchen-ghosts',
+        title: 'Kitchen of Ghosts',
+        author: 'Chidi Umeh',
+        category: 'Memoir',
+        gradient: 'linear-gradient(155deg,#050505,#ffffff 22%,#050505 90%)',
+        ink: 'light'
+      }
+    ];
+
+    const PAYSTACK_PUBLIC_KEY = 'pk_test_00000000000000000000000000000000000000';
+
+    const firebaseConfig = {
+      apiKey: 'YOUR_API_KEY',
+      authDomain: 'YOUR_PROJECT.firebaseapp.com',
+      projectId: 'YOUR_PROJECT_ID',
+      appId: 'YOUR_APP_ID'
+    };
+
+    let firebaseReady = false;
+    let auth = null;
+    let currentUser = null;
+    let pendingBookId = null;
+    let authMode = 'login';
+
+    try {
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      firebaseReady = true;
+    } catch (error) {
+      console.warn('Firebase configuration is missing.', error);
+    }
+
+    const fmtNaira = value => '₦' + value.toLocaleString('en-NG');
+
+    const store = {
+      getPurchases() {
+        return JSON.parse(localStorage.getItem('dbs_purchases') || '{}');
+      },
+      savePurchases(value) {
+        localStorage.setItem('dbs_purchases', JSON.stringify(value));
+      }
+    };
+
+    function bookCardHTML(book) {
+      const textColor = book.ink === 'dark' ? 'text-black/80' : 'text-white/90';
+
+      return `
+        <article class="card-lift bg-[#111] rounded-2xl overflow-hidden flex flex-col">
+          <div class="h-56 flex items-center justify-center relative" style="background:${book.gradient}">
+            <span class="absolute top-3 left-3 text-[10px] uppercase tracking-[.18em] ${textColor} border border-current/30 rounded-full px-2.5 py-1">
+              ${book.category}
+            </span>
+            <span class="font-display text-xl ${textColor} text-center px-8 leading-tight">
+              ${book.title}
+            </span>
+          </div>
+
+          <div class="p-5 flex flex-col flex-1">
+            <h3 class="font-display text-xl leading-snug">${book.title}</h3>
+            <p class="text-neutral-500 text-sm mt-1">${book.author}</p>
+
+            <div class="mt-5 flex items-center justify-between gap-3">
+              <span class="font-semibold">${fmtNaira(FLAT_PRICE)}</span>
+              <button
+                onclick="buyBook('${book.id}')"
+                class="premium-btn ripple-target bg-gold text-black text-sm font-semibold px-4 py-2.5 rounded-full">
+                Buy now
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderGrid() {
+      document.getElementById('bookGrid').innerHTML = BOOKS.map(bookCardHTML).join('');
+    }
+
+    function setAuthMode(mode) {
+      authMode = mode;
+      const signup = mode === 'signup';
+
+      document.getElementById('authTitle').textContent = signup
+        ? 'Create your account'
+        : 'Welcome back';
+
+      document.getElementById('authSubtitle').textContent = signup
+        ? 'One account. Every book you buy.'
+        : 'Sign in to reach your library.';
+
+      document.getElementById('nameFieldWrap').classList.toggle('hidden', !signup);
+      document.getElementById('authSubmitBtn').textContent = signup ? 'Create account' : 'Sign in';
+      document.getElementById('authSwitchPrompt').textContent = signup
+        ? 'Already have an account?'
+        : "Don't have an account?";
+      document.getElementById('authSwitchBtn').textContent = signup ? 'Sign in' : 'Create one';
+      document.getElementById('authError').classList.add('hidden');
+      document.querySelector('#authModal form').reset();
+    }
+
+    function toggleAuthMode() {
+      setAuthMode(authMode === 'login' ? 'signup' : 'login');
+    }
+
+    function showAuthError(message) {
+      const error = document.getElementById('authError');
+      error.textContent = message;
+      error.classList.remove('hidden');
+    }
+
+    function friendlyFirebaseError(error) {
+      const messages = {
+        'auth/email-already-in-use': 'An account with this email already exists.',
+        'auth/invalid-email': 'That email address is not valid.',
+        'auth/weak-password': 'Use at least 6 characters.',
+        'auth/wrong-password': 'That email and password do not match.',
+        'auth/user-not-found': 'No account found with that email.'
+      };
+
+      return messages[error.code] || error.message || 'Authentication failed.';
+    }
+
+    function handleAuthSubmit(event) {
+      event.preventDefault();
+
+      if (!firebaseReady) {
+        showAuthError('Firebase is not configured. Add your project keys in the script.');
+        return;
+      }
+
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      const button = document.getElementById('authSubmitBtn');
+
+      button.disabled = true;
+
+      if (authMode === 'signup') {
+        const name = document.getElementById('authName').value.trim();
+
+        if (!name) {
+          button.disabled = false;
+          showAuthError('Enter your name.');
+          return;
+        }
+
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(credentials =>
+            credentials.user.updateProfile({ displayName: name }).then(() => credentials.user)
+          )
+          .then(user => onAuthSuccess({
+            uid: user.uid,
+            name,
+            email
+          }))
+          .catch(error => showAuthError(friendlyFirebaseError(error)))
+          .finally(() => button.disabled = false);
+      } else {
+        auth.signInWithEmailAndPassword(email, password)
+          .then(credentials => onAuthSuccess({
+            uid: credentials.user.uid,
+            name: credentials.user.displayName || credentials.user.email,
+            email: credentials.user.email
+          }))
+          .catch(error => showAuthError(friendlyFirebaseError(error)))
+          .finally(() => button.disabled = false);
+      }
+    }
+
+    function onAuthSuccess(user) {
+      currentUser = user;
+      closeModal('authModal');
+      refreshAuthUI();
+
+      if (pendingBookId) {
+        const bookId = pendingBookId;
+        pendingBookId = null;
+        launchPaystack(bookId);
+      }
+    }
+
+    function refreshAuthUI() {
+      const signedOut = document.getElementById('signedOutControls');
+      const signedIn = document.getElementById('signedInControls');
+
+      signedOut.classList.toggle('hidden', Boolean(currentUser));
+      signedIn.classList.toggle('hidden', !currentUser);
+      signedIn.classList.toggle('flex', Boolean(currentUser));
+
+      if (currentUser) {
+        document.getElementById('greetingName').textContent =
+          'Hi, ' + currentUser.name.split(' ')[0];
+      }
+    }
+
+    function logout() {
+      if (firebaseReady) auth.signOut();
+      currentUser = null;
+      refreshAuthUI();
+      showShop();
+    }
+
+    if (firebaseReady) {
+      auth.onAuthStateChanged(user => {
+        currentUser = user
+          ? {
+              uid: user.uid,
+              name: user.displayName || user.email,
+              email: user.email
+            }
+          : null;
+
+        refreshAuthUI();
+      });
+    }
+
+    function buyBook(bookId) {
+      if (!currentUser) {
+        pendingBookId = bookId;
+        openModal('authModal');
+        setAuthMode('login');
+        showAuthError('Sign in first. Checkout will continue automatically.');
+        return;
+      }
+
+      launchPaystack(bookId);
+    }
+
+    function launchPaystack(bookId) {
+      const book = BOOKS.find(item => item.id === bookId);
+
+      if (!book || !currentUser) return;
+
+      if (typeof PaystackPop === 'undefined') {
+        showToast('Payment could not load. Check your connection.');
+        return;
+      }
+
+      const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: currentUser.email,
+        amount: FLAT_PRICE * 100,
+        currency: 'NGN',
+        ref: 'dbs_' + bookId + '_' + Date.now(),
+        metadata: {
+          book_id: book.id,
+          book_title: book.title
+        },
+        callback(response) {
+          recordPurchase(currentUser.uid, book.id);
+          showToast('Payment received — "' + book.title + '" is now in your library.');
+          renderLibrary();
+        },
+        onClose() {
+          showToast('Checkout closed. No charge was made.');
+        }
+      });
+
+      handler.openIframe();
+    }
+
+    function recordPurchase(uid, bookId) {
+      const purchases = store.getPurchases();
+
+      if (!purchases[uid]) purchases[uid] = [];
+      if (!purchases[uid].includes(bookId)) purchases[uid].push(bookId);
+
+      store.savePurchases(purchases);
+    }
+
+    function downloadHref(book) {
+      const content =
+        `${book.title}\nby ${book.author}\n\n` +
+        `Placeholder ebook file for David's Book Store.`;
+
+      return 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
+    }
+
+    function libraryCardHTML(book) {
+      return `
+        <article class="bg-[#111] border border-white/10 rounded-2xl overflow-hidden">
+          <div class="h-36 flex items-center justify-center" style="background:${book.gradient}">
+            <span class="font-display text-lg text-center px-5 ${book.ink === 'dark' ? 'text-black/80' : 'text-white/90'}">
+              ${book.title}
+            </span>
+          </div>
+
+          <div class="p-5">
+            <h4 class="font-display text-xl">${book.title}</h4>
+            <p class="text-neutral-500 text-sm mt-1">${book.author}</p>
+            <a
+              href="${downloadHref(book)}"
+              download="${book.title.replace(/\\s+/g, '_')}.txt"
+              class="premium-btn ripple-target mt-5 block text-center border border-white/20 hover:border-gold hover:text-gold rounded-full py-3 text-sm">
+              Download
+            </a>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderLibrary() {
+      const grid = document.getElementById('libraryGrid');
+      const empty = document.getElementById('libraryEmpty');
+
+      if (!currentUser) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      const ids = store.getPurchases()[currentUser.uid] || [];
+      const owned = BOOKS.filter(book => ids.includes(book.id));
+
+      if (!owned.length) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        grid.innerHTML = owned.map(libraryCardHTML).join('');
+      }
+    }
+
+    function showDashboard() {
+      if (!currentUser) {
+        openModal('authModal');
+        setAuthMode('login');
+        return;
+      }
+
+      document.getElementById('shopView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.remove('hidden');
+      renderLibrary();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showShop() {
+      document.getElementById('dashboardView').classList.add('hidden');
+      document.getElementById('shopView').classList.remove('hidden');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('modal-hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('modal-hidden');
+    }
+
+    let toastTimer;
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastText').textContent = message;
+      toast.classList.remove('toast-hidden');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('toast-hidden');
+      }, 3600);
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+
+    function createRipple(event) {
+      const button = event.currentTarget;
+      const rect = button.getBoundingClientRect();
+      const ripple = document.createElement('span');
+
+      ripple.className = 'ripple';
+      ripple.style.left = (event.clientX - rect.left) + 'px';
+      ripple.style.top = (event.clientY - rect.top) + 'px';
+
+      button.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    }
+
+    document.addEventListener('click', event => {
+      const target = event.target.closest('.ripple-target');
+      if (target) createRipple({
+        currentTarget: target,
+        clientX: event.clientX,
+        clientY: event.clientY
+      });
+    });
+
+    const CATEGORY_KEYWORDS = {
+      Fiction: ['fiction', 'novel', 'story', 'drama', 'sad', 'love', 'emotional'],
+      Business: ['business', 'career', 'money', 'productivity', 'entrepreneur', 'motivat', 'focus', 'habit'],
+      Technology: ['tech', 'technology', 'code', 'coding', 'programming', 'software', 'engineer'],
+      Essays: ['essay', 'essays', 'thoughtful', 'reflect'],
+      Memoir: ['memoir', 'life story', 'biography', 'true story', 'real life']
+    };
+
+    let chatStarted = false;
+
+    function toggleChat() {
+      const widget = document.getElementById('chatWidget');
+      const opening = widget.classList.contains('chat-hidden');
+
+      widget.classList.toggle('chat-hidden');
+
+      if (opening && !chatStarted) {
+        chatStarted = true;
+        addChatBubble(
+          'bot',
+          "Tell me a genre or mood — fiction, business, technology, essays or memoir."
+        );
+      }
+    }
+
+    function addChatBubble(sender, content) {
+      const wrap = document.getElementById('chatMessages');
+      const bubble = document.createElement('div');
+
+      bubble.className = sender === 'user'
+        ? 'self-end bg-gold text-black rounded-2xl rounded-br-sm px-4 py-2.5 max-w-[85%]'
+        : 'self-start bg-black border border-white/10 rounded-2xl rounded-bl-sm px-4 py-2.5 max-w-[85%]';
+
+      bubble.innerHTML = content;
+      wrap.appendChild(bubble);
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    function escapeHTML(value) {
+      const div = document.createElement('div');
+      div.textContent = value;
+      return div.innerHTML;
+    }
+
+    function handleChatSubmit(event) {
+      event.preventDefault();
+
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+
+      if (!text) return;
+
+      addChatBubble('user', escapeHTML(text));
+      input.value = '';
+
+      setTimeout(() => respondToChat(text), 280);
+    }
+
+    function respondToChat(text) {
+      const lower = text.toLowerCase();
+
+      const categories = Object.keys(CATEGORY_KEYWORDS).filter(category =>
+        CATEGORY_KEYWORDS[category].some(keyword => lower.includes(keyword))
+      );
+
+      let candidates = BOOKS.filter(book => categories.includes(book.category));
+
+      if (!candidates.length) {
+        candidates = [BOOKS[Math.floor(Math.random() * BOOKS.length)]];
+        addChatBubble(
+          'bot',
+          `Try “fiction”, “business”, “technology”, “essays”, or “memoir”. Meanwhile, try this:`
+        );
+      } else {
+        addChatBubble('bot', candidates.length > 1
+          ? 'Two sharp picks for you:'
+          : 'This is the one:');
+      }
+
+      candidates.slice(0, 2).forEach(book => {
+        addChatBubble('bot', `
+          <p class="font-display">${book.title}</p>
+          <p class="text-neutral-500 text-xs mt-1">${book.author} · ${book.category} · ${fmtNaira(FLAT_PRICE)}</p>
+          <button onclick="buyBook('${book.id}')" class="premium-btn mt-3 bg-gold text-black text-xs font-semibold px-3 py-2 rounded-full">
+            Buy now
+          </button>
+        `);
+      });
+    }
+
+    function initFastHero() {
+      const canvas = document.getElementById('heroCanvas');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance'
+      });
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(42, 1, .1, 100);
+      camera.position.set(0, 0, 8);
+
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+
+      scene.add(new THREE.AmbientLight(0xffffff, .4));
+
+      const goldLight = new THREE.PointLight(0xd4af37, 3, 16);
+      goldLight.position.set(0, 1, 4);
+      scene.add(goldLight);
+
+      const whiteLight = new THREE.DirectionalLight(0xffffff, 1.5);
+      whiteLight.position.set(-4, 4, 5);
+      scene.add(whiteLight);
+
+      function resize() {
+        const width = canvas.parentElement.clientWidth;
+        const height = canvas.parentElement.clientHeight;
+
+        renderer.setSize(width, height, false);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      }
+
+      function coverTexture(title, index) {
+        const c = document.createElement('canvas');
+        c.width = 512;
+        c.height = 768;
+
+        const ctx = c.getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 512, 768);
+
+        if (index % 2 === 0) {
+          gradient.addColorStop(0, '#f3d56a');
+          gradient.addColorStop(1, '#050505');
+        } else {
+          gradient.addColorStop(0, '#050505');
+          gradient.addColorStop(1, '#d4af37');
+        }
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 512, 768);
+
+        ctx.strokeStyle = 'rgba(255,255,255,.6)';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(24, 24, 464, 720);
+
+        ctx.fillStyle = index % 2 === 0 ? '#050505' : '#ffffff';
+        ctx.font = 'bold 42px Georgia';
+        ctx.textAlign = 'center';
+
+        const words = title.split(' ');
+        const lines = [];
+        let line = '';
+
+        words.forEach(word => {
+          const next = line + word + ' ';
+          if (ctx.measureText(next).width > 390 && line) {
+            lines.push(line.trim());
+            line = word + ' ';
+          } else {
+            line = next;
+          }
+        });
+
+        lines.push(line.trim());
+
+        lines.forEach((item, lineIndex) => {
+          ctx.fillText(item, 256, 360 + lineIndex * 54);
+        });
+
+        return new THREE.CanvasTexture(c);
+      }
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      const selected = [BOOKS[0], BOOKS[2], BOOKS[4]];
+
+      selected.forEach((book, index) => {
+        const cover = new THREE.MeshStandardMaterial({
+          map: coverTexture(book.title, index),
+          roughness: .42,
+          metalness: .2,
+          emissive: 0xd4af37,
+          emissiveIntensity: .07
+        });
+
+        const dark = new THREE.MeshStandardMaterial({
+          color: 0x090909,
+          roughness: .52,
+          metalness: .28
+        });
+
+        const geometry = new THREE.BoxGeometry(1.18, 1.78, .16);
+        const mesh = new THREE.Mesh(
+          geometry,
+          [dark, dark, dark, dark, cover, cover]
+        );
+
+        mesh.userData.index = index;
+        mesh.userData.baseX = index === 0 ? -1.1 : index === 1 ? .7 : 2;
+        mesh.userData.baseY = index === 0 ? .7 : index === 1 ? -.35 : .85;
+        mesh.userData.baseZ = index === 1 ? .1 : -.45;
+
+        mesh.position.set(
+          index === 0 ? -8 : index === 1 ? 8 : 10,
+          mesh.userData.baseY,
+          mesh.userData.baseZ
+        );
+
+        mesh.rotation.set(
+          index === 0 ? -1.5 : 1.4,
+          index === 1 ? 2.8 : -2.4,
+          index === 2 ? 1.2 : -.8
+        );
+
+        group.add(mesh);
+
+        const glowMaterial = new THREE.SpriteMaterial({
+          color: 0xd4af37,
+          transparent: true,
+          opacity: .2,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        });
+
+        const glow = new THREE.Sprite(glowMaterial);
+        glow.scale.set(2.7, 2.7, 1);
+        mesh.add(glow);
+
+        if (!reduced) {
+          gsap.to(mesh.position, {
+            x: mesh.userData.baseX,
+            duration: .5,
+            delay: index * .045,
+            ease: 'expo.out'
+          });
+
+          gsap.to(mesh.rotation, {
+            x: (index - 1) * .15,
+            y: index * .35,
+            z: (index - 1) * .08,
+            duration: .5,
+            delay: index * .045,
+            ease: 'expo.out'
+          });
+        } else {
+          mesh.position.x = mesh.userData.baseX;
+          mesh.rotation.set(0, index * .35, 0);
+        }
+      });
+
+      function render() {
+        group.rotation.y += reduced ? 0 : .0017;
+        group.rotation.x += reduced ? 0 : .0003;
+        renderer.render(scene, camera);
+
+        if (!reduced) requestAnimationFrame(render);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      render();
+    }
+
+    function initTronGrid() {
+      const canvas = document.getElementById('gridCanvas');
+      const ctx = canvas.getContext('2d');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let width;
+      let height;
+      let time = 0;
+
+      function resize() {
+        width = canvas.width = window.innerWidth * Math.min(window.devicePixelRatio, 1.5);
+        height = canvas.height = window.innerHeight * Math.min(window.devicePixelRatio, 1.5);
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+      }
+
+      function draw() {
+        const dpr = Math.min(window.devicePixelRatio, 1.5);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(212,175,55,.19)';
+        ctx.lineWidth = 1;
+
+        const horizon = h * .54;
+        const spacing = 42;
+        const speed = reduced ? 0 : time * 85;
+
+        for (let x = -w; x <= w * 2; x += spacing) {
+          ctx.beginPath();
+          ctx.moveTo(w / 2 + (x - w / 2) * .08, horizon);
+          ctx.lineTo(x, h);
+          ctx.stroke();
+        }
+
+        for (let y = horizon; y < h + 100; y += spacing) {
+          const offset = (speed % spacing);
+          const currentY = y + offset;
+          ctx.beginPath();
+          ctx.moveTo(0, currentY);
+          ctx.lineTo(w, currentY);
+          ctx.stroke();
+        }
+
+        const glow = ctx.createRadialGradient(w * .55, horizon, 0, w * .55, horizon, w * .7);
+        glow.addColorStop(0, 'rgba(212,175,55,.17)');
+        glow.addColorStop(1, 'rgba(212,175,55,0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, w, h);
+
+        time += .016;
+
+        if (!reduced) requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      draw();
+    }
+
+    function initGSAP() {
+      if (typeof gsap === 'undefined') return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!reduced) {
+        const title = document.getElementById('heroTitle');
+
+        gsap.fromTo(
+          '#heroEyebrow',
+          { opacity: 0, x: -35 },
+          { opacity: 1, x: 0, duration: .32, ease: 'power4.out' }
+        );
+
+        gsap.fromTo(
+          title,
+          { opacity: 0, x: -45, scale: 1.08, filter: 'blur(8px)' },
+          {
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            filter: 'blur(0px)',
+            duration: .3,
+            delay: .08,
+            ease: 'power4.out',
+            onStart: () => {
+              title.classList.add('glitch-active');
+              setTimeout(() => title.classList.remove('glitch-active'), 320);
+            }
+          }
+        );
+
+        gsap.fromTo(
+          '#heroCopy, #heroActions, #heroStats',
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: .3,
+            stagger: .055,
+            delay: .22,
+            ease: 'power3.out'
+          }
+        );
+
+        gsap.utils.toArray('.section-reveal').forEach(section => {
+          gsap.fromTo(
+            section,
+            { opacity: 0, y: 32 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: .3,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 88%',
+                once: true
+              }
+            }
+          );
+        });
+      } else {
+        gsap.set('.section-reveal, #heroEyebrow, #heroTitle, #heroCopy, #heroActions, #heroStats', {
+          opacity: 1,
+          clearProps: 'all'
+        });
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('siteNav').classList.toggle(
+        'nav-solid',
+        window.scrollY > 24
+      );
+    }, { passive: true });
+
+    renderGrid();
+    refreshAuthUI();
+    setAuthMode('login');
+    initTronGrid();
+    initFastHero();
+    initGSAP();
+  </script>
+</body>
+</html>
+```
