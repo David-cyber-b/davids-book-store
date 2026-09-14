@@ -34,17 +34,10 @@
   }
 </script>
 
-<!-- Paystack Inline checkout -->
 <script src="https://js.paystack.co/v1/inline.js"></script>
-
-<!-- Firebase Auth (compat build — works without a bundler) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<!-- Three.js for the 3D hero -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<!-- GSAP for the fast/premium motion -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
@@ -53,18 +46,13 @@
   body { background-color: #0a0a0a; }
   ::selection { background: #d4af37; color: #0a0a0a; }
   :focus-visible { outline: 2px solid #d4af37; outline-offset: 3px; }
-
   #heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-
-  /* ---------- loader ---------- */
   #loader { position: fixed; inset: 0; z-index: 200; background: #0a0a0a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
   #loaderTrack { width: 190px; height: 2px; background: rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
   #loaderBar { width: 0%; height: 100%; background: linear-gradient(90deg, #d4af37, #f2d879); }
   body.is-loading { overflow: hidden; height: 100vh; }
-
-  /* ---------- glitch headline ---------- */
- .glitch-text { position: relative; will-change: transform, filter; }
- .glitch-text.glitching { animation: glitchAnim 0.42s steps(2, end) 1; }
+.glitch-text { position: relative; will-change: transform, filter; }
+.glitch-text.glitching { animation: glitchAnim 0.42s steps(2, end) 1; }
   @keyframes glitchAnim {
     0% { text-shadow: none; transform: translate(0); }
     12% { text-shadow: -3px 0 #d4af37, 3px 0 #ffffff; transform: translate(-2px, 1px); }
@@ -74,81 +62,47 @@
     65% { text-shadow: none; transform: translate(0); }
     100% { text-shadow: none; transform: translate(0); }
   }
-
-  /* ---------- speed lines burst behind the hero copy ---------- */
-  #speedLines {
-    position: absolute; inset: -60%; opacity: 0; pointer-events: none; border-radius: 50%;
-    background: repeating-conic-gradient(from 0deg, rgba(212,175,55,0.55) 0deg 1.1deg, transparent 1.1deg 9deg);
-    mix-blend-mode: screen;
-  }
-
-  /* ---------- buttons: gold flash + ripple ---------- */
- .btn-press { position: relative; overflow: hidden; }
- .btn-press::after {
-    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: radial-gradient(circle, #f2d879, transparent 70%); opacity: 0; transition: opacity 0.15s ease;
-  }
- .btn-press.flash::after { opacity: 0.5; }
- .ripple { position: absolute; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(242,216,121,0.6), rgba(212,175,55,0) 70%); }
-
-  /* ---------- custom cursor ---------- */
-  #cursorDot {
-    position: fixed; top: 0; left: 0; width: 14px; height: 14px; margin: -7px 0 0 -7px;
-    background: #d4af37; border-radius: 50%; pointer-events: none; z-index: 300; mix-blend-mode: difference; will-change: transform;
-  }
-  body.custom-cursor-active, body.custom-cursor-active a, body.custom-cursor-active button, body.custom-cursor-active input {
-    cursor: none;
-  }
-  @media (pointer: coarse) {
-    #cursorDot { display: none!important; }
-  }
-
- .modal-backdrop { transition: opacity 200ms ease; }
- .modal-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
- .modal-hidden.modal-backdrop { opacity: 0; pointer-events: none; }
- .modal-hidden.modal-panel { transform: translateY(16px) scale(0.98); opacity: 0; }
-
- .toast { transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 260ms ease; }
- .chat-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
- .chat-hidden.chat-panel { transform: translateY(16px) scale(0.96); opacity: 0; pointer-events: none; }
-
- .nav-solid { background-color: rgba(10,10,10,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
-
- .card-lift { transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
- .card-lift:hover { transform: translateY(-6px); box-shadow: 0 25px 45px -20px rgba(0,0,0,0.75); border-color: rgba(212,175,55,0.4); }
-
+  #speedLines { position: absolute; inset: -60%; opacity: 0; pointer-events: none; border-radius: 50%; background: repeating-conic-gradient(from 0deg, rgba(212,175,55,0.55) 0deg 1.1deg, transparent 1.1deg 9deg); mix-blend-mode: screen; }
+.btn-press { position: relative; overflow: hidden; }
+.btn-press::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(circle, #f2d879, transparent 70%); opacity: 0; transition: opacity 0.15s ease; }
+.btn-press.flash::after { opacity: 0.5; }
+.ripple { position: absolute; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(242,216,121,0.6), rgba(212,175,55,0) 70%); }
+  #cursorDot { position: fixed; top: 0; left: 0; width: 14px; height: 14px; margin: -7px 0 0 -7px; background: #d4af37; border-radius: 50%; pointer-events: none; z-index: 300; mix-blend-mode: difference; will-change: transform; }
+  body.custom-cursor-active, body.custom-cursor-active a, body.custom-cursor-active button, body.custom-cursor-active input { cursor: none; }
+  @media (pointer: coarse) { #cursorDot { display: none!important; } }
+.modal-backdrop { transition: opacity 200ms ease; }
+.modal-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
+.modal-hidden.modal-backdrop { opacity: 0; pointer-events: none; }
+.modal-hidden.modal-panel { transform: translateY(16px) scale(0.98); opacity: 0; }
+.toast { transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 260ms ease; }
+.chat-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
+.chat-hidden.chat-panel { transform: translateY(16px) scale(0.96); opacity: 0; pointer-events: none; }
+.nav-solid { background-color: rgba(10,10,10,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.card-lift { transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+.card-lift:hover { transform: translateY(-6px); box-shadow: 0 25px 45px -20px rgba(0,0,0,0.75); border-color: rgba(212,175,55,0.4); }
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: #0a0a0a; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 6px; }
-
-  @media (prefers-reduced-motion: reduce) {
-   .modal-panel,.toast,.chat-panel { transition: none!important; }
-   .glitch-text.glitching { animation: none; }
-  }
+  @media (prefers-reduced-motion: reduce) {.modal-panel,.toast,.chat-panel { transition: none!important; }.glitch-text.glitching { animation: none; } }
 </style>
 </head>
 
 <body class="bg-obsidian text-white font-sans antialiased is-loading">
 
-<!-- ===================== LOADER ===================== -->
 <div id="loader" aria-hidden="true">
   <div id="loaderLogo" class="font-display text-xl tracking-wide text-gold">David's Book Store</div>
   <div id="loaderTrack"><div id="loaderBar"></div></div>
 </div>
 
-<!-- ===================== CUSTOM CURSOR ===================== -->
 <div id="cursorDot"></div>
 
-<!-- ===================== NAV ===================== -->
 <header id="siteNav" class="fixed top-0 inset-x-0 z-40 transition-colors duration-300">
   <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-5">
     <a href="#top" class="font-display text-xl tracking-tight text-white">David's Book Store</a>
-
     <div class="hidden md:flex items-center gap-9 text-sm text-ash">
       <a href="#shop" class="hover:text-gold transition-colors">Shelf</a>
       <a href="#why" class="hover:text-gold transition-colors">Why Us</a>
     </div>
-
     <div class="flex items-center gap-3">
       <div id="signedOutControls" class="flex items-center gap-3">
         <button onclick="openModal('authModal'); setAuthMode('login')" class="text-sm text-ash hover:text-gold transition-colors">Sign in</button>
@@ -157,62 +111,44 @@
       <div id="signedInControls" class="hidden items-center gap-3">
         <span id="greetingName" class="hidden sm:inline text-sm text-ash"></span>
         <button onclick="showDashboard()" class="text-sm text-ash hover:text-gold transition-colors">My library</button>
-        <button onclick="logout()" class="btn-press text-sm border-white/15 px-4 py-2 rounded-full hover:border-gold hover:text-gold">Sign out</button>
+        <button onclick="logout()" class="btn-press text-sm border border-white/15 px-4 py-2 rounded-full hover:border-gold hover:text-gold">Sign out</button>
       </div>
       <button onclick="toggleMobileMenu()" aria-label="Menu" class="md:hidden text-white">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       </button>
     </div>
   </nav>
-  <div id="mobileMenu" class="hidden md:hidden px-6 pb-5 flex flex-col gap-4 text-sm text-ash bg-obsidian/95 border-b border-white/10">
+  <div id="mobileMenu" class="hidden md:hidden px-6 pb-5 flex-col gap-4 text-sm text-ash bg-obsidian/95 border-b border-white/10">
     <a href="#shop" onclick="toggleMobileMenu()" class="hover:text-gold">Shelf</a>
     <a href="#why" onclick="toggleMobileMenu()" class="hover:text-gold">Why Us</a>
     <a href="#" onclick="showDashboard(); toggleMobileMenu()" class="hover:text-gold">My library</a>
   </div>
 </header>
 
-<!-- ===================== MAIN (shop view) ===================== -->
 <main id="shopView">
-
-  <!-- ---------- HERO (3D) ---------- -->
   <section id="top" class="relative h-[100svh] min-h-[600px] overflow-hidden">
-    <div id="heroCanvasWrap" class="absolute inset-0" aria-hidden="true">
-      <canvas id="heroCanvas"></canvas>
-    </div>
+    <div id="heroCanvasWrap" class="absolute inset-0" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
     <div id="speedLines" aria-hidden="true"></div>
-    <!-- vignette so text stays legible over the 3D scene -->
     <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 30% 40%, rgba(10,10,10,0.15), rgba(10,10,10,0.75) 60%, #0a0a0a 100%)"></div>
-
-    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-10 h-full flex flex-col justify-center">
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-10 h-full flex-col justify-center">
       <p class="text-gold text-sm mb-5">Digital books, printed nowhere</p>
-      <h1 id="heroHeadline" class="glitch-text font-display text-[2.6rem] leading-[1.08] sm:text-6xl sm:leading-[1.05] text-white max-w-xl">
-        Read like the internet isn't watching.
-      </h1>
-      <p class="mt-6 text-ash text-lg max-w-md leading-relaxed">
-        A small, considered shelf of novels, essays and technical writing. Buy once, keep the file, read on whatever screen finds you tonight.
-      </p>
-      <div class="mt-9 flex-wrap items-center gap-4">
+      <h1 id="heroHeadline" class="glitch-text font-display text-[2.6rem] leading-[1.08] sm:text-6xl sm:leading-[1.05] text-white max-w-xl">Read like the internet isn't watching.</h1>
+      <p class="mt-6 text-ash text-lg max-w-md leading-relaxed">A small, considered shelf of novels, essays and technical writing. Buy once, keep the file, read on whatever screen finds you tonight.</p>
+      <div class="mt-9 flex flex-wrap items-center gap-4">
         <a href="#shop" class="btn-press bg-gold text-obsidian font-medium px-7 py-3.5 rounded-full hover:bg-goldlight inline-block">Browse the shelf</a>
-        <button onclick="openModal('authModal'); setAuthMode('signup')" class="btn-press border-white/20 px-7 py-3.5 rounded-full hover:border-gold hover:text-gold">Create a free account</button>
+        <button onclick="openModal('authModal'); setAuthMode('signup')" class="btn-press border border-white/20 px-7 py-3.5 rounded-full hover:border-gold hover:text-gold">Create a free account</button>
       </div>
 
-      <!-- BANK TRANSFER SECTION ADDED HERE -->
       <div style="margin-top: 30px; padding: 20px; background: #1a1a1a; border: 2px solid #FFD700; border-radius: 12px; text-align: center; max-width: 480px;">
         <h3 style="color: #FFD700; margin-bottom: 12px; font-size: 18px; font-family: Sora, sans-serif;">Pay with Bank Transfer</h3>
         <p style="color: #ccc; font-size: 15px; line-height: 1.8;">
           <b>Account Name:</b> EKECHUKWU VINCENT<br>
           <b>Bank:</b> PALMPAY<br>
-          <b>Account No:</b> 702 655 8433<br>
+          <b>Account No:</b> 7026558433<br>
           <b>Amount:</b> ₦5,000
         </p>
-        <p style="color: #FFD700; font-size: 12px; margin-top: 8px;">
-          After payment, send proof on WhatsApp
-        </p>
-        <a href="https://wa.me/2347026558433?text=Hi%20I%20made%20payment%20for%20David's%20Book%20Store"
-           target="_blank"
-           style="display: inline-block; margin-top: 12px; padding: 10px 20px; background: #25D366; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px;">
-           Send Payment Proof
-        </a>
+        <p style="color: #FFD700; font-size: 12px; margin-top: 8px;">After payment, send proof on WhatsApp</p>
+        <a href="https://wa.me/2347026558433?text=Hi%20I%20made%20payment%20for%20David's%20Book%20Store" target="_blank" style="display: inline-block; margin-top: 12px; padding: 10px 20px; background: #25D366; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px;">Send Payment Proof</a>
       </div>
 
       <div class="mt-12 flex items-center gap-8 text-sm text-ash">
@@ -223,141 +159,69 @@
     </div>
   </section>
 
-  <!-- ---------- PRODUCT GRID ---------- -->
   <section id="shop" class="px-6 md:px-10 py-20 md:py-28 border-t border-white/10">
     <div class="max-w-7xl mx-auto">
       <div class="flex items-end justify-between mb-12 flex-wrap gap-4">
-        <div>
-          <h2 class="font-display text-3xl sm:text-4xl text-white">The shelf</h2>
-          <p class="text-ash mt-2 max-w-md">Every title is a DRM-free file, ₦5,000 flat. Pay once, it's yours in your library for good.</p>
-        </div>
+        <div><h2 class="font-display text-3xl sm:text-4xl text-white">The shelf</h2><p class="text-ash mt-2 max-w-md">Every title is a DRM-free file, ₦5,000 flat. Pay once, it's yours in your library for good.</p></div>
       </div>
       <div id="bookGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
   </section>
 
-  <!-- ---------- WHY ---------- -->
   <section id="why" class="px-6 md:px-10 py-20 md:py-28 border-t border-white/10 bg-charcoal/60">
     <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
-      <div class="why-card">
-        <svg class="w-7 h-7 text-gold mb-4" viewBox="0 0 24 24" fill="none"><path d="M4 4h11a2 2 0 0 1 2 2v14l-7.5-4L4 20V6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.5"/></svg>
-        <h3 class="font-display text-xl text-white mb-2">A shelf, not a warehouse</h3>
-        <p class="text-ash leading-relaxed text-sm">Six titles, each one read before it's listed. Nothing added just to pad the catalogue.</p>
-      </div>
-      <div class="why-card">
-        <svg class="w-7 h-7 text-gold mb-4" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <h3 class="font-display text-xl text-white mb-2">Yours after one payment</h3>
-        <p class="text-ash leading-relaxed text-sm">No subscription, no rental window. Buy a book and it sits in your library whenever you come back.</p>
-      </div>
-      <div class="why-card">
-        <svg class="w-7 h-7 text-gold mb-4" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0Z" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <h3 class="font-display text-xl text-white mb-2">Checkout in under a minute</h3>
-        <p class="text-ash leading-relaxed text-sm">Secure card and bank payment through Paystack. Confirmation lands straight in your library.</p>
-      </div>
+      <div class="why-card"><svg class="w-7 h-7 text-gold mb-4" viewBox="0 0 24 24" fill="none"><path d="M4 4h11a2 2 0 0 1 2 2v14l-7.5-4L4 20V6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.5"/></svg><h3 class="font-display text-xl text-white mb-2">A shelf, not a warehouse</h3><p class="text-ash leading-relaxed text-sm">Six titles, each one read before it's listed. Nothing added just to pad the catalogue.</p></div>
+      <div class="why-card"><svg class="w-7 h-7 text-gold mb-4" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><h3 class="font-display text-xl text-white mb-2">Yours after one payment</h3><p class="text-ash leading-relaxed text-sm">No subscription, no rental window. Buy a book and it sits in your library whenever you come back.</p></div>
+      <div class="why-card"><svg class="w-7 h-7 text-gold mb-4" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0Z" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><h3 class="font-display text-xl text-white mb-2">Checkout in under a minute</h3><p class="text-ash leading-relaxed text-sm">Secure card and bank payment through Paystack. Confirmation lands straight in your library.</p></div>
     </div>
   </section>
 </main>
 
-<!-- ===================== DASHBOARD (My library view) ===================== -->
 <section id="dashboardView" class="hidden pt-36 pb-24 px-6 md:px-10 min-h-screen">
   <div class="max-w-5xl mx-auto">
-    <button onclick="showShop()" class="text-sm text-ash hover:text-gold mb-8 inline-flex items-center gap-2">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Back to the shelf
-    </button>
+    <button onclick="showShop()" class="text-sm text-ash hover:text-gold mb-8 inline-flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to the shelf</button>
     <h2 class="font-display text-3xl sm:text-4xl text-white mb-2">My library</h2>
     <p class="text-ash mb-10">Every book you've bought, with a fresh download link any time.</p>
-
-    <div id="libraryEmpty" class="hidden border border-dashed border-white/15 rounded-2xl p-12 text-center">
-      <p class="text-white font-display text-xl mb-2">Nothing here yet</p>
-      <p class="text-ash text-sm mb-6">Buy a book from the shelf and it will show up in this library.</p>
-      <button onclick="showShop()" class="btn-press bg-gold text-obsidian px-6 py-3 rounded-full font-medium">Go to the shelf</button>
-    </div>
-
+    <div id="libraryEmpty" class="hidden border border-dashed border-white/15 rounded-2xl p-12 text-center"><p class="text-white font-display text-xl mb-2">Nothing here yet</p><p class="text-ash text-sm mb-6">Buy a book from the shelf and it will show up in this library.</p><button onclick="showShop()" class="btn-press bg-gold text-obsidian px-6 py-3 rounded-full font-medium">Go to the shelf</button></div>
     <div id="libraryGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
   </div>
 </section>
 
-<!-- ===================== FOOTER ===================== -->
 <footer class="border-t border-white/10 px-6 md:px-10 py-10">
   <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-ash">
-    <span class="font-display text-white">David's Book Store</span>
-    <span>&copy; 2026 David's Book Store. Payments handled by Paystack.</span>
+    <span class="font-display text-white">David's Book Store</span><span>&copy; 2026 David's Book Store. Payments handled by Paystack.</span>
   </div>
 </footer>
 
-<!-- ===================== AUTH MODAL ===================== -->
 <div id="authModal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center px-6">
   <div class="modal-backdrop absolute inset-0 bg-black/85" onclick="closeModal('authModal')"></div>
-  <div class="modal-panel relative bg-charcoal border-white/10 rounded-2xl w-full max-w-md p-8 shadow-card">
-    <button onclick="closeModal('authModal')" class="absolute top-5 right-5 text-ash hover:text-white" aria-label="Close">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-
-    <h3 id="authTitle" class="font-display text-2xl text-white mb-1">Welcome back</h3>
-    <p id="authSubtitle" class="text-ash text-sm mb-6">Sign in to reach your library.</p>
-
+  <div class="modal-panel relative bg-charcoal border border-white/10 rounded-2xl w-full max-w-md p-8 shadow-card">
+    <button onclick="closeModal('authModal')" class="absolute top-5 right-5 text-ash hover:text-white" aria-label="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    <h3 id="authTitle" class="font-display text-2xl text-white mb-1">Welcome back</h3><p id="authSubtitle" class="text-ash text-sm mb-6">Sign in to reach your library.</p>
     <form id="authForm" onsubmit="handleAuthSubmit(event)" class="flex flex-col gap-4">
-      <div id="nameFieldWrap" class="hidden">
-        <label class="text-sm text-ash block mb-1.5" for="authName">Name</label>
-        <input id="authName" type="text" autocomplete="name" class="w-full bg-obsidian border border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="Your name">
-      </div>
-      <div>
-        <label class="text-sm text-ash block mb-1.5" for="authEmail">Email</label>
-        <input id="authEmail" type="email" required autocomplete="email" class="w-full bg-obsidian border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="you@example.com">
-      </div>
-      <div>
-        <label class="text-sm text-ash block mb-1.5" for="authPassword">Password</label>
-        <input id="authPassword" type="password" required minlength="6" autocomplete="current-password" class="w-full bg-obsidian border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="At least 6 characters">
-      </div>
+      <div id="nameFieldWrap" class="hidden"><label class="text-sm text-ash block mb-1.5" for="authName">Name</label><input id="authName" type="text" autocomplete="name" class="w-full bg-obsidian border border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="Your name"></div>
+      <div><label class="text-sm text-ash block mb-1.5" for="authEmail">Email</label><input id="authEmail" type="email" required autocomplete="email" class="w-full bg-obsidian border border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="you@example.com"></div>
+      <div><label class="text-sm text-ash block mb-1.5" for="authPassword">Password</label><input id="authPassword" type="password" required minlength="6" autocomplete="current-password" class="w-full bg-obsidian border border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="At least 6 characters"></div>
       <p id="authError" class="hidden text-sm" style="color:#e07a5f"></p>
       <button type="submit" id="authSubmitBtn" class="btn-press bg-gold text-obsidian font-medium py-3 rounded-full mt-2 hover:bg-goldlight disabled:opacity-60">Sign in</button>
     </form>
-
-    <p class="text-sm text-ash mt-6 text-center">
-      <span id="authSwitchPrompt">Don't have an account?</span>
-      <button onclick="toggleAuthMode()" id="authSwitchBtn" class="text-gold hover:text-goldlight ml-1">Create one</button>
-    </p>
+    <p class="text-sm text-ash mt-6 text-center"><span id="authSwitchPrompt">Don't have an account?</span><button onclick="toggleAuthMode()" id="authSwitchBtn" class="text-gold hover:text-goldlight ml-1">Create one</button></p>
   </div>
 </div>
 
-<!-- ===================== TOAST ===================== -->
-<div id="toast" class="toast fixed bottom-6 right-6 z-50 translate-y-24 opacity-0 bg-charcoal border-white/10 rounded-xl px-5 py-4 shadow-card max-w-xs">
-  <p id="toastText" class="text-sm text-white"></p>
-</div>
+<div id="toast" class="toast fixed bottom-6 right-6 z-50 translate-y-24 opacity-0 bg-charcoal border border-white/10 rounded-xl px-5 py-4 shadow-card max-w-xs"><p id="toastText" class="text-sm text-white"></p></div>
 
-<!-- ===================== AI RECOMMENDATION CHATBOT ===================== -->
-<button id="chatToggle" onclick="toggleChat()" class="btn-press fixed bottom-6 left-6 z-50 bg-gold text-obsidian w-14 h-14 rounded-full shadow-card flex items-center justify-center hover:bg-goldlight" aria-label="Book recommendation chat">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-</button>
-
+<button id="chatToggle" onclick="toggleChat()" class="btn-press fixed bottom-6 left-6 z-50 bg-gold text-obsidian w-14 h-14 rounded-full shadow-card flex items-center justify-center hover:bg-goldlight" aria-label="Book recommendation chat"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H8l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
 <div id="chatWidget" class="chat-hidden fixed bottom-24 left-6 z-50 w-[92vw] max-w-sm">
-  <div class="chat-panel bg-charcoal border border-white/10 rounded-2xl shadow-card flex-col h-[440px] overflow-hidden">
-    <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
-      <div>
-        <p class="font-display text-white">Book concierge</p>
-        <p class="text-ash text-xs">Tell me a genre or a mood</p>
-      </div>
-      <button onclick="toggleChat()" class="text-ash hover:text-white" aria-label="Close chat">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      </button>
-    </div>
+  <div class="chat-panel bg-charcoal border-white/10 rounded-2xl shadow-card flex-col h-[440px] overflow-hidden">
+    <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between"><div><p class="font-display text-white">Book concierge</p><p class="text-ash text-xs">Tell me a genre or a mood</p></div><button onclick="toggleChat()" class="text-ash hover:text-white" aria-label="Close chat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>
     <div id="chatMessages" class="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3 text-sm"></div>
-    <form id="chatForm" onsubmit="handleChatSubmit(event)" class="border-t border-white/10 p-3 flex gap-2">
-      <input id="chatInput" type="text" placeholder="e.g. something motivational" class="flex-1 bg-obsidian border border-white/15 rounded-full px-4 py-2.5 text-sm text-white placeholder:text-ash/60 focus:border-gold">
-      <button type="submit" class="btn-press bg-gold text-obsidian rounded-full w-10 h-10 flex items-center justify-center shrink-0 hover:bg-goldlight" aria-label="Send">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-    </form>
+    <form id="chatForm" onsubmit="handleChatSubmit(event)" class="border-t border-white/10 p-3 flex gap-2"><input id="chatInput" type="text" placeholder="e.g. something motivational" class="flex-1 bg-obsidian border border-white/15 rounded-full px-4 py-2.5 text-sm text-white placeholder:text-ash/60 focus:border-gold"><button type="submit" class="btn-press bg-gold text-obsidian rounded-full w-10 h-10 flex items-center justify-center shrink-0 hover:bg-goldlight" aria-label="Send"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 12h16m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form>
   </div>
 </div>
 
 <script>
-/* =====================================================================
-   DATA
-===================================================================== */
-const FLAT_PRICE = 5000; // ₦, charged per e-book
-
+const FLAT_PRICE = 5000;
 const BOOKS = [
   { id: 'unread-hour', title: 'The Unread Hour', author: 'Adaeze Okoro', category: 'Fiction', price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#d4af37,#0a0a0a 85%)', ink: 'dark' },
   { id: 'ledger-wins', title: 'Ledger of Small Wins', author: 'Tomiwa Bello', category: 'Business', price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#0a0a0a,#d4af37 90%)', ink: 'light' },
@@ -366,132 +230,23 @@ const BOOKS = [
   { id: 'salt-roads', title: 'Salt Roads', author: 'Ijeoma Eze', category: 'Fiction', price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#d4af37,#161616 85%)', ink: 'dark' },
   { id: 'kitchen-ghosts', title: 'Kitchen of Ghosts', author: 'Chidi Umeh', category: 'Memoir', price: FLAT_PRICE, gradient: 'linear-gradient(200deg,#0a0a0a,#ffffff 18%,#0a0a0a 90%)', ink: 'light' },
 ];
-
-// >>> Replace with your own Paystack PUBLIC key before going live <<<
 const PAYSTACK_PUBLIC_KEY = 'pk_test_00000000';
+const firebaseConfig = { apiKey: 'YOUR_API_KEY', authDomain: 'YOUR_PROJECT.firebaseapp.com', projectId: 'YOUR_PROJECT_ID', appId: 'YOUR_APP_ID', };
+let firebaseReady = false; let auth = null;
+try { firebase.initializeApp(firebaseConfig); auth = firebase.auth(); firebaseReady = true; } catch (e) { console.warn('Firebase did not initialize', e); }
+const fmtNaira = (n) => '₦' + n.toLocaleString('en-NG'); const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store = { getPurchases: () => JSON.parse(localStorage.getItem('dbs_purchases') || '{}'), savePurchases: (p) => localStorage.setItem('dbs_purchases', JSON.stringify(p)), };
+let currentUser = null; let pendingBookId = null; let authMode = 'login';
 
-// >>> Replace with your own Firebase project config before going live <<<
-const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_PROJECT.firebaseapp.com',
-  projectId: 'YOUR_PROJECT_ID',
-  appId: 'YOUR_APP_ID',
-};
-
-let firebaseReady = false;
-let auth = null;
-try {
-  firebase.initializeApp(firebaseConfig);
-  auth = firebase.auth();
-  firebaseReady = true;
-} catch (e) {
-  console.warn('Firebase did not initialize — add your config at the top of the script.', e);
-}
-
-const fmtNaira = (n) => '₦' + n.toLocaleString('en-NG');
-const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* =====================================================================
-   Purchase records — demo only. See notes in previous versions: for
-   production, verify Paystack payments server-side and store purchases
-   in Firestore keyed by the Firebase uid rather than localStorage.
-===================================================================== */
-const store = {
-  getPurchases: () => JSON.parse(localStorage.getItem('dbs_purchases') || '{}'),
-  savePurchases: (p) => localStorage.setItem('dbs_purchases', JSON.stringify(p)),
-};
-
-let currentUser = null;
-let pendingBookId = null;
-let authMode = 'login';
-
-/* =====================================================================
-   Product grid
-===================================================================== */
 function bookCardHTML(book) {
   const textColor = book.ink === 'dark'? 'text-obsidian/80' : 'text-white/90';
-  return `
-    <div class="card-lift bg-charcoal border border-white/10 rounded-2xl overflow-hidden flex flex-col">
-      <div class="h-52 flex items-center justify-center relative" style="background:${book.gradient}">
-        <span class="absolute top-3 left-3 text-[11px] ${textColor} border border-current/30 rounded-full px-2.5 py-1">${book.category}</span>
-        <span class="font-display text-lg ${textColor} text-center px-6 leading-tight">${book.title}</span>
-      </div>
-      <div class="p-5 flex-col flex-1">
-        <h3 class="font-display text-lg text-white leading-snug">${book.title}</h3>
-        <p class="text-ash text-sm mt-1">${book.author}</p>
-        <div class="mt-4 flex items-center justify-between gap-3">
-          <span class="text-white font-medium">${fmtNaira(book.price)}</span>
-          <button onclick="buyBook('${book.id}')" class="btn-press bg-gold text-obsidian text-sm font-medium px-4 py-2 rounded-full hover:bg-goldlight">Buy now</button>
-        </div>
-      </div>
-    </div>`;
+  return `<div class="card-lift bg-charcoal border border-white/10 rounded-2xl overflow-hidden flex flex-col"><div class="h-52 flex items-center justify-center relative" style="background:${book.gradient}"><span class="absolute top-3 left-3 text-[11px] ${textColor} border-current/30 rounded-full px-2.5 py-1">${book.category}</span><span class="font-display text-lg ${textColor} text-center px-6 leading-tight">${book.title}</span></div><div class="p-5 flex-col flex-1"><h3 class="font-display text-lg text-white leading-snug">${book.title}</h3><p class="text-ash text-sm mt-1">${book.author}</p><div class="mt-4 flex items-center justify-between gap-3"><span class="text-white font-medium">${fmtNaira(book.price)}</span><button onclick="buyBook('${book.id}')" class="btn-press bg-gold text-obsidian text-sm font-medium px-4 py-2 rounded-full hover:bg-goldlight">Buy now</button></div></div></div>`;
 }
-function renderGrid() {
-  document.getElementById('bookGrid').innerHTML = BOOKS.map(bookCardHTML).join('');
-  setupScrollReveals(); // grid cards now exist in the DOM — wire up their whip-in
-}
+function renderGrid() { document.getElementById('bookGrid').innerHTML = BOOKS.map(bookCardHTML).join(''); setupScrollReveals(); }
 
-/* =====================================================================
-   Firebase Auth
-===================================================================== */
-function setAuthMode(mode) {
-  authMode = mode;
-  const isSignup = mode === 'signup';
-  document.getElementById('authTitle').textContent = isSignup? 'Create your account' : 'Welcome back';
-  document.getElementById('authSubtitle').textContent = isSignup? 'One account, every book you buy.' : 'Sign in to reach your library.';
-  document.getElementById('nameFieldWrap').classList.toggle('hidden',!isSignup);
-  document.getElementById('authSubmitBtn').textContent = isSignup? 'Create account' : 'Sign in';
-  document.getElementById('authSwitchPrompt').textContent = isSignup? 'Already have an account?' : "Don't have an account?";
-  document.getElementById('authSwitchBtn').textContent = isSignup? 'Sign in' : 'Create one';
-  document.getElementById('authError').classList.add('hidden');
-  document.getElementById('authForm').reset();
-}
+function setAuthMode(mode) { authMode = mode; const isSignup = mode === 'signup'; document.getElementById('authTitle').textContent = isSignup? 'Create your account' : 'Welcome back'; document.getElementById('authSubtitle').textContent = isSignup? 'One account, every book you buy.' : 'Sign in to reach your library.'; document.getElementById('nameFieldWrap').classList.toggle('hidden',!isSignup); document.getElementById('authSubmitBtn').textContent = isSignup? 'Create account' : 'Sign in'; document.getElementById('authSwitchPrompt').textContent = isSignup? 'Already have an account?' : "Don't have an account?"; document.getElementById('authSwitchBtn').textContent = isSignup? 'Sign in' : 'Create one'; document.getElementById('authError').classList.add('hidden'); document.getElementById('authForm').reset(); }
 function toggleAuthMode() { setAuthMode(authMode === 'login'? 'signup' : 'login'); }
-
-function showAuthError(msg) {
-  const el = document.getElementById('authError');
-  el.textContent = msg;
-  el.classList.remove('hidden');
-}
-
+function showAuthError(msg) { const el = document.getElementById('authError'); el.textContent = msg; el.classList.remove('hidden'); }
 function handleAuthSubmit(e) {
-  e.preventDefault();
-  if (!firebaseReady) {
-    showAuthError('Firebase is not configured yet — add your project keys at the top of the script.');
-    return;
-  }
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const submitBtn = document.getElementById('authSubmitBtn');
-  submitBtn.disabled = true;
-
-  if (authMode === 'signup') {
-    const name = document.getElementById('authName').value.trim();
-    if (!name) { submitBtn.disabled = false; return showAuthError('Enter your name.'); }
-    auth.createUserWithEmailAndPassword(email, password)
-     .then((cred) => cred.user.updateProfile({ displayName: name }).then(() => cred.user))
-     .then((user) => onAuthSuccess({ uid: user.uid, name, email }))
-     .catch((err) => showAuthError(friendlyFirebaseError(err)))
-     .finally(() => submitBtn.disabled = false);
-  } else {
-    auth.signInWithEmailAndPassword(email, password)
-     .then((cred) => onAuthSuccess({ uid: cred.user.uid, name: cred.user.displayName || cred.user.email, email: cred.user.email }))
-     .catch((err) => showAuthError(friendlyFirebaseError(err)))
-     .finally(() => submitBtn.disabled = false);
-  }
-}
-
-function friendlyFirebaseError(err) {
-  const map = {
-    'auth/email-already-in-use': 'An account with this email already exists.',
-    'auth/invalid-email': 'That email address doesn\u2019t look right.',
-    'auth/weak-password': 'Use at least 6 characters.',
-    'auth/wrong-password': 'That email and password don\u2019t match.',
-    'auth/user-not-found': 'No account found with that email.',
-    'auth/invalid-api-key': 'Firebase is not configured yet — add your project keys at the top of the script.',
-    'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'Firebase is not configured yet — add your project keys at the top of the script.',
-  };
-  return map[err.code] || err.message;
-}
-
-function onAuthSuccess
+  e.preventDefault(); if (!firebaseReady) { showAuthError('Firebase is not configured yet'); return; }
+  const email = document
