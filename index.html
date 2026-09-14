@@ -63,15 +63,15 @@
   body.is-loading { overflow: hidden; height: 100vh; }
 
   /* ---------- glitch headline ---------- */
-  .glitch-text { position: relative; will-change: transform, filter; }
-  .glitch-text.glitching { animation: glitchAnim 0.42s steps(2, end) 1; }
+ .glitch-text { position: relative; will-change: transform, filter; }
+ .glitch-text.glitching { animation: glitchAnim 0.42s steps(2, end) 1; }
   @keyframes glitchAnim {
-    0%   { text-shadow: none; transform: translate(0); }
-    12%  { text-shadow: -3px 0 #d4af37, 3px 0 #ffffff; transform: translate(-2px, 1px); }
-    24%  { text-shadow: 3px 0 #d4af37, -3px 0 #ffffff; transform: translate(2px, -1px); }
-    36%  { text-shadow: -2px 0 #d4af37, 2px 0 #ffffff; transform: translate(-1px, 0); }
-    48%  { text-shadow: 2px 0 #d4af37, -2px 0 #ffffff; transform: translate(1px, 1px); }
-    65%  { text-shadow: none; transform: translate(0); }
+    0% { text-shadow: none; transform: translate(0); }
+    12% { text-shadow: -3px 0 #d4af37, 3px 0 #ffffff; transform: translate(-2px, 1px); }
+    24% { text-shadow: 3px 0 #d4af37, -3px 0 #ffffff; transform: translate(2px, -1px); }
+    36% { text-shadow: -2px 0 #d4af37, 2px 0 #ffffff; transform: translate(-1px, 0); }
+    48% { text-shadow: 2px 0 #d4af37, -2px 0 #ffffff; transform: translate(1px, 1px); }
+    65% { text-shadow: none; transform: translate(0); }
     100% { text-shadow: none; transform: translate(0); }
   }
 
@@ -83,13 +83,13 @@
   }
 
   /* ---------- buttons: gold flash + ripple ---------- */
-  .btn-press { position: relative; overflow: hidden; }
-  .btn-press::after {
+ .btn-press { position: relative; overflow: hidden; }
+ .btn-press::after {
     content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
     background: radial-gradient(circle, #f2d879, transparent 70%); opacity: 0; transition: opacity 0.15s ease;
   }
-  .btn-press.flash::after { opacity: 0.5; }
-  .ripple { position: absolute; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(242,216,121,0.6), rgba(212,175,55,0) 70%); }
+ .btn-press.flash::after { opacity: 0.5; }
+ .ripple { position: absolute; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(242,216,121,0.6), rgba(212,175,55,0) 70%); }
 
   /* ---------- custom cursor ---------- */
   #cursorDot {
@@ -100,30 +100,30 @@
     cursor: none;
   }
   @media (pointer: coarse) {
-    #cursorDot { display: none !important; }
+    #cursorDot { display: none!important; }
   }
 
-  .modal-backdrop { transition: opacity 200ms ease; }
-  .modal-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
-  .modal-hidden .modal-backdrop { opacity: 0; pointer-events: none; }
-  .modal-hidden .modal-panel { transform: translateY(16px) scale(0.98); opacity: 0; }
+ .modal-backdrop { transition: opacity 200ms ease; }
+ .modal-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
+ .modal-hidden.modal-backdrop { opacity: 0; pointer-events: none; }
+ .modal-hidden.modal-panel { transform: translateY(16px) scale(0.98); opacity: 0; }
 
-  .toast { transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 260ms ease; }
-  .chat-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
-  .chat-hidden .chat-panel { transform: translateY(16px) scale(0.96); opacity: 0; pointer-events: none; }
+ .toast { transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 260ms ease; }
+ .chat-panel { transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
+ .chat-hidden.chat-panel { transform: translateY(16px) scale(0.96); opacity: 0; pointer-events: none; }
 
-  .nav-solid { background-color: rgba(10,10,10,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+ .nav-solid { background-color: rgba(10,10,10,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
 
-  .card-lift { transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
-  .card-lift:hover { transform: translateY(-6px); box-shadow: 0 25px 45px -20px rgba(0,0,0,0.75); border-color: rgba(212,175,55,0.4); }
+ .card-lift { transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+ .card-lift:hover { transform: translateY(-6px); box-shadow: 0 25px 45px -20px rgba(0,0,0,0.75); border-color: rgba(212,175,55,0.4); }
 
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: #0a0a0a; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 6px; }
 
   @media (prefers-reduced-motion: reduce) {
-    .modal-panel, .toast, .chat-panel { transition: none !important; }
-    .glitch-text.glitching { animation: none; }
+   .modal-panel,.toast,.chat-panel { transition: none!important; }
+   .glitch-text.glitching { animation: none; }
   }
 </style>
 </head>
@@ -157,7 +157,7 @@
       <div id="signedInControls" class="hidden items-center gap-3">
         <span id="greetingName" class="hidden sm:inline text-sm text-ash"></span>
         <button onclick="showDashboard()" class="text-sm text-ash hover:text-gold transition-colors">My library</button>
-        <button onclick="logout()" class="btn-press text-sm border border-white/15 px-4 py-2 rounded-full hover:border-gold hover:text-gold">Sign out</button>
+        <button onclick="logout()" class="btn-press text-sm border-white/15 px-4 py-2 rounded-full hover:border-gold hover:text-gold">Sign out</button>
       </div>
       <button onclick="toggleMobileMenu()" aria-label="Menu" class="md:hidden text-white">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -191,10 +191,30 @@
       <p class="mt-6 text-ash text-lg max-w-md leading-relaxed">
         A small, considered shelf of novels, essays and technical writing. Buy once, keep the file, read on whatever screen finds you tonight.
       </p>
-      <div class="mt-9 flex flex-wrap items-center gap-4">
+      <div class="mt-9 flex-wrap items-center gap-4">
         <a href="#shop" class="btn-press bg-gold text-obsidian font-medium px-7 py-3.5 rounded-full hover:bg-goldlight inline-block">Browse the shelf</a>
-        <button onclick="openModal('authModal'); setAuthMode('signup')" class="btn-press border border-white/20 px-7 py-3.5 rounded-full hover:border-gold hover:text-gold">Create a free account</button>
+        <button onclick="openModal('authModal'); setAuthMode('signup')" class="btn-press border-white/20 px-7 py-3.5 rounded-full hover:border-gold hover:text-gold">Create a free account</button>
       </div>
+
+      <!-- BANK TRANSFER SECTION ADDED HERE -->
+      <div style="margin-top: 30px; padding: 20px; background: #1a1a1a; border: 2px solid #FFD700; border-radius: 12px; text-align: center; max-width: 480px;">
+        <h3 style="color: #FFD700; margin-bottom: 12px; font-size: 18px; font-family: Sora, sans-serif;">Pay with Bank Transfer</h3>
+        <p style="color: #ccc; font-size: 15px; line-height: 1.8;">
+          <b>Account Name:</b> EKECHUKWU VINCENT<br>
+          <b>Bank:</b> PALMPAY<br>
+          <b>Account No:</b> 702 655 8433<br>
+          <b>Amount:</b> ₦5,000
+        </p>
+        <p style="color: #FFD700; font-size: 12px; margin-top: 8px;">
+          After payment, send proof on WhatsApp
+        </p>
+        <a href="https://wa.me/2347026558433?text=Hi%20I%20made%20payment%20for%20David's%20Book%20Store"
+           target="_blank"
+           style="display: inline-block; margin-top: 12px; padding: 10px 20px; background: #25D366; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px;">
+           Send Payment Proof
+        </a>
+      </div>
+
       <div class="mt-12 flex items-center gap-8 text-sm text-ash">
         <div><span class="text-white font-display text-2xl">6</span> titles on the shelf</div>
         <div class="w-px h-8 bg-white/15"></div>
@@ -269,7 +289,7 @@
 <!-- ===================== AUTH MODAL ===================== -->
 <div id="authModal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center px-6">
   <div class="modal-backdrop absolute inset-0 bg-black/85" onclick="closeModal('authModal')"></div>
-  <div class="modal-panel relative bg-charcoal border border-white/10 rounded-2xl w-full max-w-md p-8 shadow-card">
+  <div class="modal-panel relative bg-charcoal border-white/10 rounded-2xl w-full max-w-md p-8 shadow-card">
     <button onclick="closeModal('authModal')" class="absolute top-5 right-5 text-ash hover:text-white" aria-label="Close">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
@@ -284,11 +304,11 @@
       </div>
       <div>
         <label class="text-sm text-ash block mb-1.5" for="authEmail">Email</label>
-        <input id="authEmail" type="email" required autocomplete="email" class="w-full bg-obsidian border border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="you@example.com">
+        <input id="authEmail" type="email" required autocomplete="email" class="w-full bg-obsidian border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="you@example.com">
       </div>
       <div>
         <label class="text-sm text-ash block mb-1.5" for="authPassword">Password</label>
-        <input id="authPassword" type="password" required minlength="6" autocomplete="current-password" class="w-full bg-obsidian border border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="At least 6 characters">
+        <input id="authPassword" type="password" required minlength="6" autocomplete="current-password" class="w-full bg-obsidian border-white/15 rounded-lg px-4 py-3 text-white placeholder:text-ash/60 focus:border-gold" placeholder="At least 6 characters">
       </div>
       <p id="authError" class="hidden text-sm" style="color:#e07a5f"></p>
       <button type="submit" id="authSubmitBtn" class="btn-press bg-gold text-obsidian font-medium py-3 rounded-full mt-2 hover:bg-goldlight disabled:opacity-60">Sign in</button>
@@ -302,7 +322,7 @@
 </div>
 
 <!-- ===================== TOAST ===================== -->
-<div id="toast" class="toast fixed bottom-6 right-6 z-50 translate-y-24 opacity-0 bg-charcoal border border-white/10 rounded-xl px-5 py-4 shadow-card max-w-xs">
+<div id="toast" class="toast fixed bottom-6 right-6 z-50 translate-y-24 opacity-0 bg-charcoal border-white/10 rounded-xl px-5 py-4 shadow-card max-w-xs">
   <p id="toastText" class="text-sm text-white"></p>
 </div>
 
@@ -312,7 +332,7 @@
 </button>
 
 <div id="chatWidget" class="chat-hidden fixed bottom-24 left-6 z-50 w-[92vw] max-w-sm">
-  <div class="chat-panel bg-charcoal border border-white/10 rounded-2xl shadow-card flex flex-col h-[440px] overflow-hidden">
+  <div class="chat-panel bg-charcoal border border-white/10 rounded-2xl shadow-card flex-col h-[440px] overflow-hidden">
     <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
       <div>
         <p class="font-display text-white">Book concierge</p>
@@ -339,16 +359,16 @@
 const FLAT_PRICE = 5000; // ₦, charged per e-book
 
 const BOOKS = [
-  { id: 'unread-hour',    title: 'The Unread Hour',      author: 'Adaeze Okoro',  category: 'Fiction',    price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#d4af37,#0a0a0a 85%)', ink: 'dark'  },
-  { id: 'ledger-wins',    title: 'Ledger of Small Wins', author: 'Tomiwa Bello',  category: 'Business',   price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#0a0a0a,#d4af37 90%)', ink: 'light' },
-  { id: 'static-signal',  title: 'Static and Signal',    author: 'Kwame Mensah',  category: 'Technology', price: FLAT_PRICE, gradient: 'linear-gradient(200deg,#f2d879,#0a0a0a 80%)', ink: 'dark'  },
-  { id: 'marginalia',     title: 'Marginalia',           author: 'Femi Okafor',   category: 'Essays',     price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#ffffff,#0a0a0a 75%)', ink: 'dark'  },
-  { id: 'salt-roads',     title: 'Salt Roads',           author: 'Ijeoma Eze',    category: 'Fiction',    price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#d4af37,#161616 85%)', ink: 'dark'  },
-  { id: 'kitchen-ghosts', title: 'Kitchen of Ghosts',    author: 'Chidi Umeh',    category: 'Memoir',     price: FLAT_PRICE, gradient: 'linear-gradient(200deg,#0a0a0a,#ffffff 18%,#0a0a0a 90%)', ink: 'light' },
+  { id: 'unread-hour', title: 'The Unread Hour', author: 'Adaeze Okoro', category: 'Fiction', price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#d4af37,#0a0a0a 85%)', ink: 'dark' },
+  { id: 'ledger-wins', title: 'Ledger of Small Wins', author: 'Tomiwa Bello', category: 'Business', price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#0a0a0a,#d4af37 90%)', ink: 'light' },
+  { id: 'static-signal', title: 'Static and Signal', author: 'Kwame Mensah', category: 'Technology', price: FLAT_PRICE, gradient: 'linear-gradient(200deg,#f2d879,#0a0a0a 80%)', ink: 'dark' },
+  { id: 'marginalia', title: 'Marginalia', author: 'Femi Okafor', category: 'Essays', price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#ffffff,#0a0a0a 75%)', ink: 'dark' },
+  { id: 'salt-roads', title: 'Salt Roads', author: 'Ijeoma Eze', category: 'Fiction', price: FLAT_PRICE, gradient: 'linear-gradient(160deg,#d4af37,#161616 85%)', ink: 'dark' },
+  { id: 'kitchen-ghosts', title: 'Kitchen of Ghosts', author: 'Chidi Umeh', category: 'Memoir', price: FLAT_PRICE, gradient: 'linear-gradient(200deg,#0a0a0a,#ffffff 18%,#0a0a0a 90%)', ink: 'light' },
 ];
 
 // >>> Replace with your own Paystack PUBLIC key before going live <<<
-const PAYSTACK_PUBLIC_KEY = 'pk_test_00000000000000000000000000000000000000';
+const PAYSTACK_PUBLIC_KEY = 'pk_test_00000000';
 
 // >>> Replace with your own Firebase project config before going live <<<
 const firebaseConfig = {
@@ -389,14 +409,14 @@ let authMode = 'login';
    Product grid
 ===================================================================== */
 function bookCardHTML(book) {
-  const textColor = book.ink === 'dark' ? 'text-obsidian/80' : 'text-white/90';
+  const textColor = book.ink === 'dark'? 'text-obsidian/80' : 'text-white/90';
   return `
     <div class="card-lift bg-charcoal border border-white/10 rounded-2xl overflow-hidden flex flex-col">
       <div class="h-52 flex items-center justify-center relative" style="background:${book.gradient}">
         <span class="absolute top-3 left-3 text-[11px] ${textColor} border border-current/30 rounded-full px-2.5 py-1">${book.category}</span>
         <span class="font-display text-lg ${textColor} text-center px-6 leading-tight">${book.title}</span>
       </div>
-      <div class="p-5 flex flex-col flex-1">
+      <div class="p-5 flex-col flex-1">
         <h3 class="font-display text-lg text-white leading-snug">${book.title}</h3>
         <p class="text-ash text-sm mt-1">${book.author}</p>
         <div class="mt-4 flex items-center justify-between gap-3">
@@ -417,16 +437,16 @@ function renderGrid() {
 function setAuthMode(mode) {
   authMode = mode;
   const isSignup = mode === 'signup';
-  document.getElementById('authTitle').textContent = isSignup ? 'Create your account' : 'Welcome back';
-  document.getElementById('authSubtitle').textContent = isSignup ? 'One account, every book you buy.' : 'Sign in to reach your library.';
-  document.getElementById('nameFieldWrap').classList.toggle('hidden', !isSignup);
-  document.getElementById('authSubmitBtn').textContent = isSignup ? 'Create account' : 'Sign in';
-  document.getElementById('authSwitchPrompt').textContent = isSignup ? 'Already have an account?' : "Don't have an account?";
-  document.getElementById('authSwitchBtn').textContent = isSignup ? 'Sign in' : 'Create one';
+  document.getElementById('authTitle').textContent = isSignup? 'Create your account' : 'Welcome back';
+  document.getElementById('authSubtitle').textContent = isSignup? 'One account, every book you buy.' : 'Sign in to reach your library.';
+  document.getElementById('nameFieldWrap').classList.toggle('hidden',!isSignup);
+  document.getElementById('authSubmitBtn').textContent = isSignup? 'Create account' : 'Sign in';
+  document.getElementById('authSwitchPrompt').textContent = isSignup? 'Already have an account?' : "Don't have an account?";
+  document.getElementById('authSwitchBtn').textContent = isSignup? 'Sign in' : 'Create one';
   document.getElementById('authError').classList.add('hidden');
   document.getElementById('authForm').reset();
 }
-function toggleAuthMode() { setAuthMode(authMode === 'login' ? 'signup' : 'login'); }
+function toggleAuthMode() { setAuthMode(authMode === 'login'? 'signup' : 'login'); }
 
 function showAuthError(msg) {
   const el = document.getElementById('authError');
@@ -449,15 +469,15 @@ function handleAuthSubmit(e) {
     const name = document.getElementById('authName').value.trim();
     if (!name) { submitBtn.disabled = false; return showAuthError('Enter your name.'); }
     auth.createUserWithEmailAndPassword(email, password)
-      .then((cred) => cred.user.updateProfile({ displayName: name }).then(() => cred.user))
-      .then((user) => onAuthSuccess({ uid: user.uid, name, email }))
-      .catch((err) => showAuthError(friendlyFirebaseError(err)))
-      .finally(() => submitBtn.disabled = false);
+     .then((cred) => cred.user.updateProfile({ displayName: name }).then(() => cred.user))
+     .then((user) => onAuthSuccess({ uid: user.uid, name, email }))
+     .catch((err) => showAuthError(friendlyFirebaseError(err)))
+     .finally(() => submitBtn.disabled = false);
   } else {
     auth.signInWithEmailAndPassword(email, password)
-      .then((cred) => onAuthSuccess({ uid: cred.user.uid, name: cred.user.displayName || cred.user.email, email: cred.user.email }))
-      .catch((err) => showAuthError(friendlyFirebaseError(err)))
-      .finally(() => submitBtn.disabled = false);
+     .then((cred) => onAuthSuccess({ uid: cred.user.uid, name: cred.user.displayName || cred.user.email, email: cred.user.email }))
+     .catch((err) => showAuthError(friendlyFirebaseError(err)))
+     .finally(() => submitBtn.disabled = false);
   }
 }
 
@@ -474,633 +494,4 @@ function friendlyFirebaseError(err) {
   return map[err.code] || err.message;
 }
 
-function onAuthSuccess(user) {
-  currentUser = user;
-  closeModal('authModal');
-  refreshAuthUI();
-  if (pendingBookId) {
-    const id = pendingBookId;
-    pendingBookId = null;
-    launchPaystack(id);
-  }
-}
-
-function logout() {
-  if (firebaseReady) auth.signOut();
-  currentUser = null;
-  refreshAuthUI();
-  showShop();
-}
-
-function refreshAuthUI() {
-  const user = currentUser;
-  document.getElementById('signedOutControls').classList.toggle('hidden', !!user);
-  document.getElementById('signedInControls').classList.toggle('flex', !!user);
-  document.getElementById('signedInControls').classList.toggle('hidden', !user);
-  if (user) document.getElementById('greetingName').textContent = 'Hi, ' + user.name.split(' ')[0];
-}
-
-if (firebaseReady) {
-  auth.onAuthStateChanged((user) => {
-    currentUser = user ? { uid: user.uid, name: user.displayName || user.email, email: user.email } : null;
-    refreshAuthUI();
-  });
-}
-
-/* =====================================================================
-   Purchase flow (Paystack, flat ₦5,000 per book)
-===================================================================== */
-function buyBook(bookId) {
-  if (!currentUser) {
-    pendingBookId = bookId;
-    openModal('authModal');
-    setAuthMode('login');
-    showAuthError('Sign in first, then checkout will continue automatically.');
-    return;
-  }
-  launchPaystack(bookId);
-}
-
-function launchPaystack(bookId) {
-  const book = BOOKS.find(b => b.id === bookId);
-  if (!book || !currentUser) return;
-
-  if (typeof PaystackPop === 'undefined') {
-    showToast('Payment could not load. Check your connection and try again.');
-    return;
-  }
-
-  const handler = PaystackPop.setup({
-    key: PAYSTACK_PUBLIC_KEY,
-    email: currentUser.email,
-    amount: FLAT_PRICE * 100, // kobo — ₦5,000 flat per e-book
-    currency: 'NGN',
-    ref: 'dbs_' + bookId + '_' + Date.now(),
-    metadata: { book_id: book.id, book_title: book.title },
-    callback: function () {
-      // NOTE: for production, verify response.reference on your server
-      // before unlocking the download.
-      recordPurchase(currentUser.uid, book.id);
-      showToast('Payment received — "' + book.title + '" is now in your library.');
-      renderLibrary();
-    },
-    onClose: function () {
-      showToast('Checkout closed. No charge was made.');
-    }
-  });
-  handler.openIframe();
-}
-
-function recordPurchase(uid, bookId) {
-  const purchases = store.getPurchases();
-  if (!purchases[uid]) purchases[uid] = [];
-  if (!purchases[uid].includes(bookId)) purchases[uid].push(bookId);
-  store.savePurchases(purchases);
-}
-
-/* =====================================================================
-   Dashboard / My library
-===================================================================== */
-function downloadHref(book) {
-  const content = `${book.title}\nby ${book.author}\n\nThis is a placeholder file standing in for the real e-book,\nfor testing David's Book Store download flow.`;
-  return 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
-}
-
-function libraryCardHTML(book) {
-  return `
-    <div class="bg-charcoal border border-white/10 rounded-2xl overflow-hidden flex flex-col">
-      <div class="h-36 flex items-center justify-center" style="background:${book.gradient}">
-        <span class="font-display text-base ${book.ink === 'dark' ? 'text-obsidian/80' : 'text-white/90'} text-center px-4">${book.title}</span>
-      </div>
-      <div class="p-4 flex flex-col flex-1">
-        <h4 class="font-display text-white">${book.title}</h4>
-        <p class="text-ash text-sm">${book.author}</p>
-        <a href="${downloadHref(book)}" download="${book.title.replace(/\s+/g, '_')}.txt"
-           class="btn-press mt-4 border border-white/15 hover:border-gold hover:text-gold text-sm py-2.5 rounded-full text-center">
-          Download link
-        </a>
-      </div>
-    </div>`;
-}
-
-function renderLibrary() {
-  const grid = document.getElementById('libraryGrid');
-  const empty = document.getElementById('libraryEmpty');
-  if (!currentUser) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
-  const purchases = store.getPurchases()[currentUser.uid] || [];
-  const owned = BOOKS.filter(b => purchases.includes(b.id));
-  if (owned.length === 0) {
-    empty.classList.remove('hidden');
-    grid.innerHTML = '';
-  } else {
-    empty.classList.add('hidden');
-    grid.innerHTML = owned.map(libraryCardHTML).join('');
-    gsap.from('#libraryGrid > div', { opacity: 0, y: 30, duration: 0.3, stagger: 0.05, ease: 'power4.out' });
-  }
-}
-
-function showDashboard() {
-  if (!currentUser) { openModal('authModal'); setAuthMode('login'); return; }
-  document.getElementById('shopView').classList.add('hidden');
-  document.getElementById('dashboardView').classList.remove('hidden');
-  renderLibrary();
-  window.scrollTo({ top: 0 });
-}
-function showShop() {
-  document.getElementById('dashboardView').classList.add('hidden');
-  document.getElementById('shopView').classList.remove('hidden');
-}
-
-/* =====================================================================
-   Modal + toast + nav helpers
-===================================================================== */
-function openModal(id) { document.getElementById(id).classList.remove('modal-hidden'); }
-function closeModal(id) { document.getElementById(id).classList.add('modal-hidden'); }
-
-let toastTimer = null;
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  document.getElementById('toastText').textContent = msg;
-  toast.classList.remove('translate-y-24', 'opacity-0');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 3600);
-}
-
-function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
-
-window.addEventListener('scroll', () => {
-  document.getElementById('siteNav').classList.toggle('nav-solid', window.scrollY > 20);
-});
-
-/* =====================================================================
-   AI-style recommendation chatbot (rule-based, entirely client-side —
-   a real generative model would need a backend to hold the API key)
-===================================================================== */
-const CATEGORY_KEYWORDS = {
-  Fiction:    ['fiction', 'novel', 'story', 'stories', 'drama', 'sad', 'heartbreak', 'emotional', 'love'],
-  Business:   ['business', 'career', 'money', 'productivity', 'entrepreneur', 'motivat', 'inspire', 'focus', 'habit'],
-  Technology: ['tech', 'technology', 'code', 'coding', 'programming', 'software', 'geek', 'build', 'engineer'],
-  Essays:     ['essay', 'essays', 'short read', 'thoughtful', 'reflect'],
-  Memoir:     ['memoir', 'life story', 'biography', 'true story', 'real life'],
-};
-
-let chatStarted = false;
-function toggleChat() {
-  const widget = document.getElementById('chatWidget');
-  const opening = widget.classList.contains('chat-hidden');
-  widget.classList.toggle('chat-hidden');
-  if (opening && !chatStarted) {
-    chatStarted = true;
-    addChatBubble('bot', "Hi, I'm the David's Book Store concierge. Tell me a genre or a mood — fiction, business, technology, essays or memoir — and I'll point you to a book.");
-  }
-}
-
-function addChatBubble(sender, html) {
-  const wrap = document.getElementById('chatMessages');
-  const bubble = document.createElement('div');
-  bubble.className = sender === 'user'
-    ? 'self-end bg-gold text-obsidian rounded-2xl rounded-br-sm px-4 py-2.5 max-w-[85%]'
-    : 'self-start bg-obsidian border border-white/10 text-white rounded-2xl rounded-bl-sm px-4 py-2.5 max-w-[85%]';
-  bubble.innerHTML = html;
-  wrap.appendChild(bubble);
-  wrap.scrollTop = wrap.scrollHeight;
-}
-
-function handleChatSubmit(e) {
-  e.preventDefault();
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-  addChatBubble('user', escapeHTML(text));
-  input.value = '';
-  setTimeout(() => respondToChat(text), 350);
-}
-
-function escapeHTML(s) {
-  const div = document.createElement('div');
-  div.textContent = s;
-  return div.innerHTML;
-}
-
-function respondToChat(text) {
-  const lower = text.toLowerCase();
-  const matchedCategories = Object.keys(CATEGORY_KEYWORDS).filter(cat =>
-    CATEGORY_KEYWORDS[cat].some(kw => lower.includes(kw))
-  );
-
-  let candidates = BOOKS.filter(b => matchedCategories.includes(b.category));
-  if (candidates.length === 0) {
-    candidates = [BOOKS[Math.floor(Math.random() * BOOKS.length)]];
-    addChatBubble('bot', "I didn't catch a genre there — try words like \"fiction\", \"business\" or \"technology\". Meanwhile, here's one people tend to like:");
-  } else {
-    const introText = candidates.length > 1 ? "Here's a couple I'd point you to:" : "Here's one I'd point you to:";
-    addChatBubble('bot', introText);
-  }
-
-  candidates.slice(0, 2).forEach(book => {
-    addChatBubble('bot', `
-      <p class="font-display">${book.title}</p>
-      <p class="text-ash text-xs mt-0.5">${book.author} — ${book.category} — ${fmtNaira(book.price)}</p>
-      <button onclick="buyBook('${book.id}')" class="btn-press mt-2 bg-gold text-obsidian text-xs font-medium px-3 py-1.5 rounded-full hover:bg-goldlight">Buy now</button>
-    `);
-  });
-}
-
-/* =====================================================================
-   GSAP: register plugin
-===================================================================== */
-gsap.registerPlugin(ScrollTrigger);
-
-/* =====================================================================
-   CUSTOM CURSOR — snaps to a big scale over anything clickable
-===================================================================== */
-function initCustomCursor() {
-  if (!window.matchMedia('(pointer: fine)').matches || REDUCED_MOTION) {
-    document.getElementById('cursorDot').style.display = 'none';
-    return;
-  }
-  document.body.classList.add('custom-cursor-active');
-  const dot = document.getElementById('cursorDot');
-  const xTo = gsap.quickTo(dot, 'x', { duration: 0.12, ease: 'power3' });
-  const yTo = gsap.quickTo(dot, 'y', { duration: 0.12, ease: 'power3' });
-  window.addEventListener('mousemove', (e) => { xTo(e.clientX); yTo(e.clientY); });
-
-  document.addEventListener('mouseover', (e) => {
-    if (e.target.closest('button, a, input')) gsap.to(dot, { scale: 3, duration: 0.25, ease: 'back.out(3)' });
-  });
-  document.addEventListener('mouseout', (e) => {
-    if (e.target.closest('button, a, input') && !e.relatedTarget?.closest('button, a, input')) {
-      gsap.to(dot, { scale: 1, duration: 0.25, ease: 'power3.out' });
-    }
-  });
-}
-
-/* =====================================================================
-   BUTTONS — spring hover + gold flash + click ripple (delegated, so it
-   works on buttons rendered later like grid/chat cards)
-===================================================================== */
-function initButtonFX() {
-  document.addEventListener('mouseover', (e) => {
-    const btn = e.target.closest('.btn-press');
-    if (btn && !btn._hovering) {
-      btn._hovering = true;
-      btn.classList.add('flash');
-      setTimeout(() => btn.classList.remove('flash'), 150);
-      if (!REDUCED_MOTION) gsap.to(btn, { y: -4, scale: 1.06, duration: 0.22, ease: 'back.out(3)' });
-    }
-  });
-  document.addEventListener('mouseout', (e) => {
-    const btn = e.target.closest('.btn-press');
-    if (btn && !btn.contains(e.relatedTarget)) {
-      btn._hovering = false;
-      if (!REDUCED_MOTION) gsap.to(btn, { y: 0, scale: 1, duration: 0.28, ease: 'power3.out' });
-    }
-  });
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.btn-press');
-    if (!btn) return;
-    const rect = btn.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height) * 1.8;
-    const span = document.createElement('span');
-    span.className = 'ripple';
-    span.style.width = span.style.height = size + 'px';
-    span.style.left = (e.clientX - rect.left - size / 2) + 'px';
-    span.style.top = (e.clientY - rect.top - size / 2) + 'px';
-    span.style.transform = 'scale(0)';
-    span.style.opacity = '0.7';
-    btn.appendChild(span);
-    gsap.to(span, { scale: 1, opacity: 0, duration: 0.5, ease: 'power2.out', onComplete: () => span.remove() });
-  });
-}
-
-/* =====================================================================
-   SCROLL REVEALS — sections whip in fast, hero gets extra parallax
-===================================================================== */
-function setupScrollReveals() {
-  ScrollTrigger.batch('#bookGrid > div', {
-    start: 'top 88%',
-    onEnter: (els) => gsap.fromTo(els, { opacity: 0, y: 60, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, stagger: 0.06, ease: 'back.out(2.2)', overwrite: true }),
-    once: true,
-  });
-}
-
-function setupStaticScrollReveals() {
-  gsap.utils.toArray('.why-card').forEach((el, i) => {
-    gsap.from(el, {
-      opacity: 0, y: 50, duration: 0.3, ease: 'back.out(2)', delay: i * 0.05,
-      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
-    });
-  });
-
-  // hero parallax: the whole canvas drifts at a different rate than the page scroll
-  gsap.to('#heroCanvasWrap', {
-    y: 160, ease: 'none',
-    scrollTrigger: { trigger: '#top', start: 'top top', end: 'bottom top', scrub: 0.4 }
-  });
-}
-
-/* =====================================================================
-   LOADER — ~1s premium intro, then reveals the hero motion
-===================================================================== */
-function playLoader(onDone) {
-  if (REDUCED_MOTION) {
-    document.getElementById('loader').style.display = 'none';
-    document.body.classList.remove('is-loading');
-    onDone();
-    return;
-  }
-  const tl = gsap.timeline({
-    onComplete: () => {
-      document.getElementById('loader').style.display = 'none';
-      document.body.classList.remove('is-loading');
-      onDone();
-    }
-  });
-  tl.to('#loaderBar', { width: '100%', duration: 0.55, ease: 'power2.inOut' })
-    .to('#loaderLogo', { scale: 1.08, duration: 0.12, ease: 'power1.out' }, '-=0.08')
-    .to('#loader', { autoAlpha: 0, duration: 0.32, ease: 'power4.inOut' }, '+=0.02');
-}
-
-function playHeadlineSlam() {
-  const h1 = document.getElementById('heroHeadline');
-  h1.classList.add('glitching');
-  gsap.fromTo(h1,
-    { opacity: 0, scale: REDUCED_MOTION ? 1 : 1.3, filter: REDUCED_MOTION ? 'blur(0px)' : 'blur(10px)' },
-    { opacity: 1, scale: 1, filter: 'blur(0px)', duration: REDUCED_MOTION ? 0.3 : 0.42, ease: 'power4.out' }
-  );
-  setTimeout(() => h1.classList.remove('glitching'), 440);
-}
-
-function playSpeedLinesBurst() {
-  if (REDUCED_MOTION) return;
-  gsap.fromTo('#speedLines',
-    { opacity: 0.6, scale: 0.3 },
-    { opacity: 0, scale: 2.2, duration: 0.6, ease: 'power2.out' }
-  );
-}
-
-/* =====================================================================
-   3D HERO — Three.js: Tron-style grid + particles, books fly in fast
-   from scattered angles with a stretch/opacity "motion blur", spin hard,
-   then decelerate into a slow float-and-glow idle loop.
-===================================================================== */
-let playHeroIntro = () => {};
-
-function initHero3D() {
-  const canvas = document.getElementById('heroCanvas');
-  const wrap = document.getElementById('heroCanvasWrap');
-  if (!canvas || typeof THREE === 'undefined') return;
-
-  const isMobile = window.innerWidth < 768;
-  let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  } catch (e) {
-    console.warn('WebGL unavailable — showing static hero background instead.', e);
-    wrap.style.background = 'radial-gradient(circle at 30% 30%, #1a1a1a, #0a0a0a 70%)';
-    return;
-  }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
-
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0a0a0a, 0.045);
-
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-  camera.position.set(0, 0.4, isMobile ? 8.5 : 6.5);
-
-  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
-  const key = new THREE.DirectionalLight(0xffffff, 0.6);
-  key.position.set(3, 4, 5);
-  scene.add(key);
-  const goldGlow = new THREE.PointLight(0xd4af37, 1.4, 12);
-  goldGlow.position.set(-2, 1, 3);
-  scene.add(goldGlow);
-
-  /* ---- Tron-style scrolling grid floor ---- */
-  function makeGridTexture() {
-    const size = 512;
-    const c = document.createElement('canvas');
-    c.width = c.height = size;
-    const ctx = c.getContext('2d');
-    ctx.fillStyle = '#0a0a0a';
-    ctx.fillRect(0, 0, size, size);
-    ctx.strokeStyle = 'rgba(212,175,55,0.28)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= size; i += 32) {
-      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, size); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(size, i); ctx.stroke();
-    }
-    ctx.strokeStyle = 'rgba(212,175,55,0.6)';
-    ctx.lineWidth = 2;
-    for (let i = 0; i <= size; i += 128) {
-      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, size); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(size, i); ctx.stroke();
-    }
-    const tex = new THREE.CanvasTexture(c);
-    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-    tex.repeat.set(isMobile ? 8 : 14, isMobile ? 16 : 28);
-    return tex;
-  }
-  const gridTex = makeGridTexture();
-  const gridMat = new THREE.MeshBasicMaterial({ map: gridTex, transparent: true, opacity: 0.55, side: THREE.DoubleSide });
-  const gridMesh = new THREE.Mesh(new THREE.PlaneGeometry(40, 90), gridMat);
-  gridMesh.rotation.x = -1.15;
-  gridMesh.position.set(0, -2.4, -6);
-  scene.add(gridMesh);
-
-  /* ---- fast-moving particle field ---- */
-  const particleCount = isMobile ? 140 : 320;
-  const particlePos = new Float32Array(particleCount * 3);
-  for (let i = 0; i < particleCount; i++) {
-    particlePos[i * 3] = (Math.random() - 0.5) * 14;
-    particlePos[i * 3 + 1] = (Math.random() - 0.5) * 7;
-    particlePos[i * 3 + 2] = -Math.random() * 24;
-  }
-  const particleGeo = new THREE.BufferGeometry();
-  particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-  const particleMat = new THREE.PointsMaterial({ color: 0xd4af37, size: 0.045, transparent: true, opacity: 0.75, sizeAttenuation: true });
-  const particles = new THREE.Points(particleGeo, particleMat);
-  scene.add(particles);
-  const PARTICLE_SPEED = 5.5;
-
-  /* ---- glow sprite texture, generated on the fly ---- */
-  function makeGlowTexture() {
-    const size = 256;
-    const c = document.createElement('canvas');
-    c.width = c.height = size;
-    const ctx = c.getContext('2d');
-    const g = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
-    g.addColorStop(0, 'rgba(212,175,55,0.55)');
-    g.addColorStop(1, 'rgba(212,175,55,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, size, size);
-    return new THREE.CanvasTexture(c);
-  }
-  const glowTexture = makeGlowTexture();
-
-  function makeCoverTexture(title, dark) {
-    const w = 256, h = 384;
-    const c = document.createElement('canvas');
-    c.width = w; c.height = h;
-    const ctx = c.getContext('2d');
-    const g = ctx.createLinearGradient(0, 0, w, h);
-    if (dark) { g.addColorStop(0, '#d4af37'); g.addColorStop(1, '#0a0a0a'); }
-    else { g.addColorStop(0, '#111111'); g.addColorStop(1, '#d4af37'); }
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(10, 10, w - 20, h - 20);
-    ctx.fillStyle = dark ? 'rgba(10,10,10,0.85)' : 'rgba(255,255,255,0.9)';
-    ctx.font = '600 22px Georgia, serif';
-    ctx.textAlign = 'center';
-    wrapText(ctx, title, w / 2, h / 2 - 10, w - 60, 28);
-    return new THREE.CanvasTexture(c);
-  }
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-    const words = text.split(' ');
-    let line = '', lines = [];
-    for (const word of words) {
-      const test = line + word + ' ';
-      if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = word + ' '; }
-      else line = test;
-    }
-    lines.push(line);
-    const startY = y - (lines.length - 1) * lineHeight / 2;
-    lines.forEach((l, i) => ctx.fillText(l.trim(), x, startY + i * lineHeight));
-  }
-
-  const group = new THREE.Group();
-  scene.add(group);
-
-  const titles = BOOKS.map(b => b.title);
-  const bookMeshes = [];
-  const bookCount = isMobile ? 4 : 6;
-  const spread = isMobile ? 2.6 : 3.6;
-
-  for (let i = 0; i < bookCount; i++) {
-    const dark = i % 2 === 0;
-    const cover = makeCoverTexture(titles[i % titles.length], dark);
-    const sideMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.6, metalness: 0.2, transparent: true });
-    const coverMat = new THREE.MeshStandardMaterial({ map: cover, roughness: 0.5, metalness: 0.15, emissive: 0xd4af37, emissiveIntensity: 0.06, transparent: true });
-    const geo = new THREE.BoxGeometry(1, 1.5, 0.12);
-    const materials = [sideMat, sideMat, sideMat, sideMat, coverMat, coverMat];
-    const mesh = new THREE.Mesh(geo, materials);
-
-    const angle = (i / bookCount) * Math.PI * 2;
-    const targetX = Math.cos(angle) * spread * (0.5 + Math.random() * 0.5);
-    const targetY = (Math.random() - 0.5) * 1.6;
-    const targetZ = Math.sin(angle) * spread * 0.4 - 1;
-
-    // scattered off-screen start point for the fly-in
-    const flyAngle = Math.random() * Math.PI * 2;
-    const flyDist = 9 + Math.random() * 6;
-    const startX = Math.cos(flyAngle) * flyDist;
-    const startY = Math.sin(flyAngle) * flyDist * 0.6 + (Math.random() - 0.5) * 3;
-    const startZ = targetZ - 6 - Math.random() * 4;
-
-    mesh.position.set(REDUCED_MOTION ? targetX : startX, REDUCED_MOTION ? targetY : startY, REDUCED_MOTION ? targetZ : startZ);
-    mesh.rotation.set((Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.2);
-    materials.forEach(m => m.opacity = REDUCED_MOTION ? 1 : 0.15);
-    if (!REDUCED_MOTION) mesh.scale.setScalar(1.6);
-
-    const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
-    glow.scale.set(2.6, 2.6, 1);
-    mesh.add(glow);
-
-    mesh.userData = {
-      baseX: targetX, baseY: targetY, baseZ: targetZ,
-      phase: i * 1.1, spinSpeed: 0.003 + Math.random() * 0.002,
-      settled: REDUCED_MOTION,
-    };
-    group.add(mesh);
-    bookMeshes.push(mesh);
-  }
-
-  playHeroIntro = function () {
-    if (REDUCED_MOTION) return;
-    bookMeshes.forEach((m, i) => {
-      const delay = i * 0.07;
-      gsap.to(m.position, { x: m.userData.baseX, y: m.userData.baseY, z: m.userData.baseZ, duration: 0.85, delay, ease: 'expo.out' });
-      gsap.to(m.rotation, {
-        x: m.rotation.x + (Math.random() > 0.5 ? 1 : -1) * Math.PI * (3 + Math.random() * 2),
-        y: m.rotation.y + (Math.random() > 0.5 ? 1 : -1) * Math.PI * (4 + Math.random() * 3),
-        duration: 0.9, delay, ease: 'power3.out',
-        onComplete: () => { m.userData.settled = true; }
-      });
-      gsap.to(m.scale, { x: 1, y: 1, z: 1, duration: 0.6, delay: delay + 0.15, ease: 'power3.out' });
-      m.material.forEach(mat => gsap.to(mat, { opacity: 1, duration: 0.5, delay: delay + 0.1, ease: 'power2.out' }));
-    });
-  };
-
-  function resize() {
-    const w = wrap.clientWidth, h = wrap.clientHeight;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.position.z = w < 768 ? 8.5 : 6.5;
-    camera.updateProjectionMatrix();
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let scrollTarget = window.scrollY;
-  window.addEventListener('scroll', () => { scrollTarget = window.scrollY; }, { passive: true });
-  let scrollCurrent = 0;
-
-  const clock = new THREE.Clock();
-
-  function frame() {
-    const t = clock.getElapsedTime();
-    const delta = clock.getDelta();
-    scrollCurrent += (scrollTarget - scrollCurrent) * 0.08;
-
-    camera.position.y = 0.4 - scrollCurrent * 0.0022;
-    group.rotation.x = scrollCurrent * 0.0005;
-    group.rotation.y = scrollCurrent * 0.0003;
-
-    bookMeshes.forEach((m) => {
-      if (m.userData.settled) {
-        m.position.y = m.userData.baseY + Math.sin(t * 0.6 + m.userData.phase) * 0.25;
-        m.rotation.y += m.userData.spinSpeed;
-      }
-    });
-
-    // Tron floor + particles race toward the camera
-    gridTex.offset.y -= delta * 0.5;
-    const pos = particleGeo.attributes.position.array;
-    for (let i = 0; i < particleCount; i++) {
-      pos[i * 3 + 2] += delta * PARTICLE_SPEED;
-      if (pos[i * 3 + 2] > camera.position.z) {
-        pos[i * 3 + 2] = -24;
-        pos[i * 3] = (Math.random() - 0.5) * 14;
-        pos[i * 3 + 1] = (Math.random() - 0.5) * 7;
-      }
-    }
-    particleGeo.attributes.position.needsUpdate = true;
-
-    renderer.render(scene, camera);
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-}
-
-/* =====================================================================
-   Init
-===================================================================== */
-initCustomCursor();
-initButtonFX();
-renderGrid();
-refreshAuthUI();
-setAuthMode('login');
-initHero3D();
-setupStaticScrollReveals();
-
-playLoader(() => {
-  playHeadlineSlam();
-  playSpeedLinesBurst();
-  playHeroIntro();
-  ScrollTrigger.refresh();
-});
-</script>
-</body>
-</html>
+function onAuthSuccess
